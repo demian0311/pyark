@@ -1,0 +1,7 @@
+{% if cli %}from {{ package_name }}.cli import app
+
+app()
+{% else %}from {{ package_name }} import greet
+
+print(greet())
+{% endif %}

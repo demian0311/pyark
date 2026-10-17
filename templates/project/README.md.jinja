@@ -1,0 +1,13 @@
+# {{ project_name }}
+
+{{ description }}
+
+Made with `pyark new`. Everything resolves from the local store; no network needed.
+
+```bash
+just            # list tasks
+just test       # pytest
+just check      # ruff + ty
+just fmt        # ruff format and import sort
+uv run python -m {{ package_name }}
+```

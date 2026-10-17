@@ -1,0 +1,30 @@
+# pyark project template. `pyark new <name>` answers project_name from the argument and
+# python_version from manifest/python.txt; the rest take defaults unless you pass -d key=value.
+_min_copier_version: "9.0.0"
+_templates_suffix: .jinja
+_answers_file: .copier-answers.yml
+
+project_name:
+  type: str
+  help: Project name (also the directory and the distribution name)
+  validator: "{% if not project_name | regex_search('^[a-z][a-z0-9-]*$') %}lowercase letters, digits and dashes, starting with a letter{% endif %}"
+
+package_name:
+  type: str
+  default: "{{ project_name | replace('-', '_') }}"
+  when: false
+
+description:
+  type: str
+  default: ""
+  help: One line for pyproject and the README
+
+python_version:
+  type: str
+  default: "3.14"
+  help: Python version to pin (must be in the pyark store)
+
+cli:
+  type: bool
+  default: false
+  help: Add a typer command-line entry point named after the project?

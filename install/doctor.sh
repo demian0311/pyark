@@ -60,5 +60,3 @@ if command -v uv >/dev/null; then
   done
 fi
 
-echo
-echo "not built yet (as of 2026-10-17): pyark new"

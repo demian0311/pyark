@@ -12,7 +12,7 @@ Run it once while online and it fills a **store**: Arch packages, CPython builds
 - **CLI tools** on your PATH: ruff, ty, just, pre-commit, ipython, copier, build, marimo, mkdocs.
 - **A Python-ready nvim**: LazyVim with ruff and ty as language servers, parsers and plugins restored from the store, nothing downloaded at runtime.
 - **A local docs site** (`pyark serve`, <http://localhost:8800>) with guides and the mirrored documentation of every library in the manifest, plus the Python docs, the Arch Wiki and a shelf of free books.
-- **Coming** (not built as of 2026-10-17): `pyark new` for scaffolding projects.
+- **`pyark new <name>`**: a project with a `src/` package, tests, ruff, ty, pytest and a `justfile`, synced from the store and committed.
 
 ## Set up a new machine
 
@@ -54,9 +54,9 @@ Or keep it on a USB drive and point pyark at it: `export PYARK_STORE=/run/media/
 ## Daily use
 
 ```bash
-uv init invoices && cd invoices
-uv add polars httpx pytest    # resolves from the wheelhouse, instantly
-uv run pytest
+pyark new invoices && cd invoices   # src/ layout, tests, ruff, ty, pytest, justfile, committed
+uv add polars httpx                 # resolves from the wheelhouse, instantly
+just test
 uv add some-package-not-in-the-manifest   # fails fast: not in the store
 ```
 
@@ -70,10 +70,11 @@ To change Python versions: edit `manifest/python.txt` (first line is the default
 
 | Path | What |
 |---|---|
-| `bin/pyark` | the one command: `harvest`, `install`, `serve`, `doctor`, and soon `new` |
+| `bin/pyark` | the one command: `harvest`, `install`, `serve`, `new`, `doctor` |
 | `harvest/*.sh` | one script per store part, run online |
 | `install/*.sh` | one script per target, run offline |
 | `manifest/*.txt` | what to fetch: packages, tools, Arch packages, Python versions, docs |
+| `templates/project/` | the copier template behind `pyark new` |
 | `nvim/` | the LazyVim layer `pyark install nvim` copies into `~/.config/nvim` |
 | `site/` | mkdocs source of the local docs site |
 | `lib/common.sh` | shared shell: paths, logging, manifest reader, uv bootstrap |

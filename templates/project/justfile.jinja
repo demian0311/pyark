@@ -1,0 +1,28 @@
+# `just` lists these. `just <task>` runs one. Everything goes through uv, so the project's own venv is used.
+set quiet
+
+default:
+    just --list --unsorted
+
+# run the test suite
+test *args:
+    uv run pytest {{ '{{' }}args{{ '}}' }}
+
+# lint and type check
+check:
+    uv run ruff check .
+    uv run ty check
+
+# format and sort imports, fixing what ruff can
+fmt:
+    uv run ruff check --fix .
+    uv run ruff format .
+
+# coverage report in the terminal
+cov:
+    uv run pytest --cov={{ package_name }} --cov-report=term-missing
+
+# drop the venv and lock, then rebuild from the store
+reset:
+    rm -rf .venv uv.lock
+    uv sync

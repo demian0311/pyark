@@ -1,0 +1,11 @@
+import typer
+
+from {{ package_name }} import greet
+
+app = typer.Typer(help="{{ description or project_name }}")
+
+
+@app.command()
+def hello(name: str = "world") -> None:
+    """Say hello."""
+    typer.echo(greet(name))

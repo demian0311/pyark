@@ -2,14 +2,15 @@
 
 ```bash
 cd ~/code
-uv init invoices
+pyark new invoices -d description="Monthly invoice run"
 cd invoices
+just            # lists the tasks: test, check, fmt, cov, reset
 uv add polars httpx
-uv add --dev pytest ruff
-uv run python main.py
 ```
 
-`uv init` writes a `pyproject.toml`, a `.python-version` pinned to the default Python, a `main.py` and a `README.md`. The first `uv add` creates `.venv` from the store's interpreter and a `uv.lock`.
+`pyark new` lays out a `src/` package with a test, a `pyproject.toml` with ruff, pytest and ty configured, a `justfile`, a `.gitignore`, and a `.python-version` pinned to the store's default Python. It then runs `uv sync`, which creates `.venv` and `uv.lock` from the store, and makes the first git commit. Options, all passed as `-d key=value`: `cli=true` adds a typer command named after the project, `python_version=3.13` picks another stored Python.
+
+For a throwaway, `uv init scratch` is enough: `pyproject.toml`, `main.py`, nothing else.
 
 **Run things**
 
@@ -30,5 +31,3 @@ uv run python main.py
 
 `uv run --with polars python` starts Python with a library available, no project needed. The environment is cached and reused.
 
-!!! note "Coming"
-    `pyark new <name>` with a fuller template (ruff and pytest configured, a justfile, pre-commit) is not built yet as of 2026-10-17.

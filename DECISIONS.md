@@ -39,3 +39,9 @@ Dated. Append, never rewrite. Agent-facing.
 - Wheelhouse now also covers `manifest/tools.txt` names (debugpy was missing). `debugpy-adapter` lands on PATH from `uv tool install debugpy`; the extra's dap-python setup uses it, but dap-python itself only loads with the `dap.core` extra, which is the user's choice.
 - Verified 2026-10-17 headless with ruff/ty extracted from the store onto PATH: both attach to a .py buffer, 3 diagnostics. Not yet verified with the pacman-installed binaries (sudo step pending).
 - Omarchy's lazy config has `checker.enabled = true`; offline this fails silently (`notify = false`). Left alone; documented on the site's nvim page.
+
+## 2026-10-17 — pyark new and a crawl fix
+
+- `templates/project` is a copier template (copier from the wheelhouse). `install/new.sh` answers `project_name` and `python_version` (first line of `manifest/python.txt`), passes extra `-d` through, runs `uv sync`, `git init`, first commit. Hatchling backend; editable installs need `editables`, which was missing from the wheelhouse until this (found by the first offline test).
+- Typer with one command is the root command: `cli-app --name x`, not `cli-app hello`.
+- Docs crawl now carries `--domains=<host>`: without it wget followed affiliate redirects on docs.python-guide.org into amazon.com (386 MB before it was killed). The polluted mirror was deleted and the harvest restarted; done entries are skipped by their stamps.

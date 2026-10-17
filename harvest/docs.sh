@@ -31,9 +31,12 @@ do_zip() { # do_zip <dir> <url>
 
 do_site() { # do_site <dir> <url>
   mkdir -p "$1"
-  # --no-parent keeps the crawl below the URL's path; -nH drops the host directory;
-  # --convert-links makes links relative so the tree serves under any prefix.
-  wget --quiet --mirror --no-parent --no-host-directories --page-requisites --adjust-extension \
+  local host; host=${2#*://}; host=${host%%/*}
+  # --no-parent keeps the crawl below the URL's path; --domains pins it to the site's host even
+  # when a link redirects elsewhere (2026-10-17: affiliate links on docs.python-guide.org sent
+  # wget to amazon.com for 386 MB); -nH drops the host directory; --convert-links makes links
+  # relative so the tree serves under any prefix.
+  wget --quiet --mirror --no-parent --domains="$host" --no-host-directories --page-requisites --adjust-extension \
        --convert-links --quota="$quota" --wait=0 -e robots=off --user-agent="pyark-harvest (wget)" \
        --reject-regex='(\?|/_sources/|\.(pdf|zip|whl|tar\.gz|mp4|webm))' \
        --directory-prefix="$1" "$2" || [ $? -eq 8 ]   # 8 = some pages 404'd; not fatal
