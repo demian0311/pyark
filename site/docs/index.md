@@ -36,6 +36,7 @@ This machine has a complete Python development environment that works with the n
 
 **Living without a search engine**
 
+- Anything in the docs: [Search all docs](find/) is one box over every mirrored page.
 - Library API: open the library under Reference docs and use its own search.
 - Anything installed in a project: `uv run python -m pydoc -b` inside the project opens a browser on the docstrings of every module it can import.
 - Standard library: the Python docs have the full module index.

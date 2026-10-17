@@ -66,3 +66,13 @@
 .ref-list li.missing .name { color: var(--slate-red); }
 .ref-list li.missing .name::before { content: "✗ "; }
 @media (max-width: 44rem) { .ref-list li { grid-template-columns: 1fr; gap: .1rem; } }
+
+/* pagefind UI in slate */
+:root, [data-md-color-scheme="default"], [data-md-color-scheme="slate"] {
+  --pagefind-ui-scale: .85; --pagefind-ui-primary: var(--slate-primary); --pagefind-ui-text: var(--slate-text);
+  --pagefind-ui-background: var(--slate-bg); --pagefind-ui-border: var(--slate-border); --pagefind-ui-tag: var(--slate-surface);
+  --pagefind-ui-border-width: 1px; --pagefind-ui-border-radius: .5rem; --pagefind-ui-font: "Inter", system-ui, sans-serif;
+}
+.md-typeset .pagefind-ui__result-link { color: var(--slate-primary); font-weight: 600; }
+.md-typeset .pagefind-ui__result-excerpt { color: var(--slate-muted); }
+.md-typeset .pagefind-ui__result-title::before { content: attr(data-src) " "; }

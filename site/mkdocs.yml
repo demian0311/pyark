@@ -28,5 +28,6 @@ nav:
   - Tools: tools.md
   - Editor (nvim): nvim.md
   - Reference docs: reference.md
+  - Search all docs: find.md
 plugins: [search]
 markdown_extensions: [admonition, attr_list, md_in_html, tables, pymdownx.superfences, pymdownx.highlight, toc]

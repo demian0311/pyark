@@ -3,6 +3,7 @@
 # manifest/docs.txt and what store/docs actually holds, run mkdocs, link store/docs as /ref.
 source "$(dirname "$0")/../lib/common.sh"
 need mkdocs
+ensure_uv
 src="$PYARK_STORE/site-src"; out="$PYARK_STORE/site"; docs="$PYARK_STORE/docs"
 rm -rf "$src"; cp -r "$PYARK_ROOT/site" "$src"
 
@@ -37,3 +38,20 @@ hues=(blue teal orange purple green red yellow cyan gray)
 mkdocs build -q -f "$src/mkdocs.yml" -d "$out"
 ln -sfn "$docs" "$out/ref"
 log "site: built $out ($(find "$out" -name '*.html' -not -path '*/ref/*' | wc -l) pages), /ref -> store/docs"
+
+# One search over every mirrored doc: pagefind (from the wheelhouse, no tool install because the
+# package has no console script) indexes store/docs into store/site/pagefind. Takes a few minutes;
+# skipped when the index is newer than the last docs harvest, forced with PYARK_REINDEX=1.
+if [ -f "$docs/HARVESTED" ]; then
+  idx="$PYARK_STORE/search"   # outside $out, which mkdocs build recreates every time
+  if [ -z "${PYARK_REINDEX:-}" ] && [ -f "$idx/pagefind-entry.json" ] && [ "$idx/pagefind-entry.json" -nt "$docs/HARVESTED" ]; then
+    log "site: search index is newer than the docs harvest, kept (PYARK_REINDEX=1 to rebuild)"
+  else
+    log "site: indexing store/docs for search (a few minutes)"
+    rm -rf "$idx"
+    UV_OFFLINE=1 "$UV" run -q --no-project --with 'pagefind[bin]' python -m pagefind --site "$docs" --output-path "$idx" --force-language en \
+      --exclude-selectors "nav,header,footer,aside,.sidebar,.toctree-wrapper,.md-sidebar,.sphinxsidebar,.bd-sidebar,.md-header,.md-footer" 2>&1 \
+      | grep -E 'Indexed [0-9]+ pages|Finished' | sed 's/^/  /' >&2
+  fi
+  ln -sfn "$idx" "$out/pagefind"
+fi

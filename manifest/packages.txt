@@ -73,6 +73,7 @@ mkdocs-material
 mkdocstrings[python]
 hatchling
 editables
+pagefind[bin]
 
 # Notebooks
 marimo

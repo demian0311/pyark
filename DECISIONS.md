@@ -30,7 +30,7 @@ Dated. Append, never rewrite. Agent-facing.
 - Per-site cap `PYARK_DOCS_QUOTA` (default 500m). CDN-hosted assets (fonts, some JS) are not fetched; pages still read.
 - Library docs are entries in `manifest/docs.txt` whose id equals the package name; `pyark doctor` can diff against `packages.txt`. No source for: tomli-w, orjson, freezegun, anthropic.
 - Site: mkdocs-material from the wheelhouse, built into `store/site`, `store/docs` symlinked as `/ref`, served by `python -m http.server` on `localhost:8800`. Reference page generated at build from manifest + store state.
-- Search: mkdocs search covers the guides only. One search over all mirrored docs is OPEN; candidate is pagefind (static index over any HTML tree, pip-installable). pydoc is per project (`uv run python -m pydoc -b`), not a global server.
+- Search: mkdocs search covers the guides; pagefind covers all mirrored docs (see 2026-10-17 search entry). pydoc is per project (`uv run python -m pydoc -b`).
 
 ## 2026-10-17 — nvim layer
 
@@ -59,3 +59,12 @@ Dated. Append, never rewrite. Agent-facing.
 - `manifest/docs.txt` columns: id, kind, source, title, description, opts. zip opts `entry=` and `prune=`; SQLite lands on docs.html with support/purchase/news/consortium pages and the CGI search binaries pruned (39→28 MB).
 - Site look: slate palette (https://diagrammo.app/slate/) via `site/docs/assets/slate.css` on Material; fonts Schibsted Grotesk / Inter / JetBrains Mono vendored (OFL) in `site/docs/assets/fonts`, `font: false` so nothing loads from Google. Reference page is generated HTML: nine hue-coded groups, name + description + "size · date" (no "harvested"). Home has four hue cards.
 - Visual check: headless Chromium screenshots (`chromium --headless=new --screenshot`), dark scheme followed the system.
+
+## 2026-10-17 — cross-docs search (pagefind)
+
+- Considered adopting devpi/Velodex/Posit (index servers: a daemon for a one-machine problem), conda-pack (uv lock + store already reproduce), DevDocs (Ruby), Kiwix (second server and format), Zeal docsets (kept in reserve as a possible `docset` kind if a big mirror keeps breaking). Adopted only pagefind.
+- `pagefind[bin]` is in packages.txt, NOT tools.txt: its wheel has no console script, so `uv tool install` fails ("Failed to install entrypoints"). Run as `uv run --no-project --with 'pagefind[bin]' python -m pagefind`.
+- Index in `store/search` (outside `store/site`, which mkdocs recreates), symlinked as `/pagefind`. `--force-language en` is required: without it pages tagged en-US or untagged went to separate per-language indexes the UI never queried. Rebuilt only when older than `store/docs/HARVESTED`, or `PYARK_REINDEX=1`. 23,304 pages, 183 MB, ~4.5 min.
+- Harvest strips `data-pagefind-body` from mirrored pages: Pro Git ships it, and its presence anywhere makes pagefind index only marked pages (first index: 102 of 23,334).
+- Search page is `/find/`, not `/search/` (mkdocs owns that directory for its own index); deep link `?find=<query>` because Material's search grabs `?q=`.
+- Verified headless 2026-10-17: "dataframe join" → pandas DataFrame, "pathlib glob" → Python pathlib, "git rebase" → Pro Git Rebasing, "sqlite pragma journal_mode" → SQLite keyword index. First query ~5 s (wasm and chunk load).

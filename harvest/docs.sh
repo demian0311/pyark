@@ -68,6 +68,9 @@ harvest_one() { # harvest_one <id> <kind> <source> [opts]
   if [ -f "$dir/HARVESTED" ] && [ -z "${PYARK_REFRESH:-}" ]; then log "docs: have $1"; return; fi
   log "docs: $1 ($2)"
   if "do_$2" "$dir" "$3"; then
+    # A page carrying data-pagefind-body makes pagefind index ONLY such pages site-wide
+    # (Pro Git had 101 of them; the whole store indexed as 102 pages). Strip the marker.
+    grep -rl --include='*.html' 'data-pagefind-body' "$dir" 2>/dev/null | xargs -r sed -i 's/ data-pagefind-body\(="[^"]*"\)\?//g'
     stamp "$dir"; log "docs: $1 done ($(du -sh "$dir" | cut -f1))"
   else
     failed+=("$1"); warn "docs: $1 FAILED"
