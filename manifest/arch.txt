@@ -1,0 +1,8 @@
+# pyark manifest/arch.txt — Arch packages harvest/arch.sh fetches into store/arch.
+# One package per line. Dependencies already installed on this machine are not
+# fetched (target is this laptop; see DECISIONS.md 2026-10-17).
+uv
+ruff
+ty
+just
+arch-wiki-docs

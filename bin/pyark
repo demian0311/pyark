@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# pyark — an offline-capable Python dev world for Omarchy.
+#   pyark harvest [arch|python|wheels|nvim|docs|all]   run online: fill the store
+#   pyark install [arch|python|nvim|site|all]          run offline: build from the store
+#   pyark serve                                        docs site on localhost:$PYARK_SITE_PORT
+#   pyark new <name>                                   new project from templates/
+#   pyark doctor                                       what the store holds and how old it is
+source "$(dirname "$(readlink -f "$0")")/../lib/common.sh"
+
+usage() { sed -n '2,8p' "$0" >&2; exit 2; }
+
+run_group() { # run_group <harvest|install> <target> <all-targets...>
+  local kind=$1 target=$2; shift 2
+  if [ "$target" = all ]; then
+    for t in "$@"; do bash "$PYARK_ROOT/$kind/$t.sh"; done
+  else
+    [ -f "$PYARK_ROOT/$kind/$target.sh" ] || die "no $kind target '$target' (one of: $* all)"
+    bash "$PYARK_ROOT/$kind/$target.sh"
+  fi
+}
+
+cmd=${1:-}; shift || true
+case "$cmd" in
+  harvest) run_group harvest "${1:-all}" arch python wheels nvim docs ;;
+  install) run_group install "${1:-all}" arch python nvim site ;;
+  serve)   bash "$PYARK_ROOT/install/serve.sh" ;;
+  new)     [ -n "${1:-}" ] || usage; bash "$PYARK_ROOT/install/new.sh" "$@" ;;
+  doctor)  bash "$PYARK_ROOT/install/doctor.sh" ;;
+  *)       usage ;;
+esac
