@@ -17,7 +17,7 @@ gen="$src/docs/reference.md"
   while IFS= read -r line; do
     if [[ "$line" =~ ^#\ (.+) ]]; then section="${BASH_REMATCH[1]}"; printf '\n## %s\n\n| | |\n|---|---|\n' "$section"; continue; fi
     [[ -z "$line" || "$line" =~ ^# ]] && continue
-    IFS=$'\t' read -r id kind srcurl title <<<"$line"
+    IFS=$'\t' read -r id kind srcurl title _opts <<<"$line"
     if [[ "$srcurl" == *"{ver}"* ]]; then ids=(); for v in $(manifest python); do ids+=("$id-$v|${title//\{ver\}/$v}"); done
     else ids=("$id|$title"); fi
     for it in "${ids[@]}"; do
