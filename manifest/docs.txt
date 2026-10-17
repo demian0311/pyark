@@ -1,30 +1,94 @@
-# pyark manifest/docs.txt — curated 2026-10-17. Sources verified reachable 2026-10-17.
-# Format: id <TAB> kind <TAB> source <TAB> note
-# kind: html-zip (download and unzip) · sphinx | mkdocs | asciidoc (clone, build to HTML)
-#       html-repo (clone, serve as-is) · pacman (install package, symlink its HTML) · notebooks (clone, convert)
-# Library docs are NOT listed here: harvest/docs.sh derives them from manifest/packages.txt
-# (readthedocs htmlzip where published, else the project's docs/ tree).
-# License and exact build command are read from each source at harvest time, never recorded here.
+# pyark manifest/docs.txt — documentation harvest/docs.sh mirrors into store/docs/<id>/.
+# Format: id <TAB> kind <TAB> source <TAB> title
+# kinds:  zip     download a zip of built HTML and unpack it (strips the top-level dir).
+#                 {ver} expands once per version in manifest/python.txt (id gets -<ver>).
+#         site    wget --mirror of a published docs site, scoped below the URL's path.
+#                 Capped at $PYARK_DOCS_QUOTA per site (default 500m). CDN assets not fetched.
+#         pacman  extract the HTML tree from an Arch package already in store/arch.
+# Why mirrors, not builds: Read the Docs no longer serves HTML zips for most projects
+# (checked 2026-10-17: only pytest, pytest-cov, build, rich still did), and building each
+# project's docs needs that project's doc toolchain. A mirror of the published site is uniform.
+# Library ids match names in manifest/packages.txt so `pyark doctor` can report gaps.
+# Every URL below returned 200 on 2026-10-17.
 
 # Core reference
-python	html-zip	https://docs.python.org/{ver}/archives/python-{ver}-docs-html.zip	one per version in manifest/python.txt
-packaging-guide	sphinx	https://github.com/pypa/packaging.python.org	pyproject, wheels, publishing
+python	zip	https://docs.python.org/{ver}/archives/python-{ver}-docs-html.zip	Python {ver} documentation
+packaging-guide	site	https://packaging.python.org/en/latest/	Python Packaging User Guide
+arch-wiki	pacman	arch-wiki-docs:usr/share/doc/arch-wiki/html	Arch Wiki
 
 # Guides and books
-pro-git	asciidoc	https://github.com/progit/progit2	git reference
-python-cheatsheet	html-repo	https://github.com/gto76/python-cheatsheet	one-page language and stdlib summary
-hitchhikers-guide	sphinx	https://github.com/realpython/python-guide	project layout, idioms
-cosmicpython	asciidoc	https://github.com/cosmicpython/book	architecture patterns in Python
-think-python	notebooks	https://github.com/AllenDowney/ThinkPython	from-scratch textbook, 3rd ed
-dive-into-python3	html-repo	https://github.com/diveintomark/diveintopython3	idiomatic Python by example
-learnxinyminutes-python	html-repo	https://github.com/adambard/learnxinyminutes-docs	python.md only, render with mkdocs
+pro-git	site	https://git-scm.com/book/en/v2	Pro Git
+python-cheatsheet	site	https://gto76.github.io/python-cheatsheet/	Comprehensive Python Cheatsheet
+hitchhikers-guide	site	https://docs.python-guide.org/	The Hitchhiker's Guide to Python
+cosmicpython	site	https://www.cosmicpython.com/book/	Architecture Patterns with Python
+think-python	site	https://allendowney.github.io/ThinkPython/	Think Python, 3rd edition
+dive-into-python3	site	https://diveintopython3.net/	Dive Into Python 3
+learnxinyminutes	site	https://learnxinyminutes.com/python/	Learn Python in Y minutes
 
-# System
-arch-wiki	pacman	arch-wiki-docs	Omarchy is Arch; HTML under /usr/share/doc/arch-wiki/html
+# Tools
+uv	site	https://docs.astral.sh/uv/	uv
+ruff	site	https://docs.astral.sh/ruff/	Ruff
+ty	site	https://docs.astral.sh/ty/	ty
+pytest	site	https://docs.pytest.org/en/stable/	pytest
+pytest-cov	site	https://pytest-cov.readthedocs.io/en/latest/	pytest-cov
+pre-commit	site	https://pre-commit.com/	pre-commit
+ipython	site	https://ipython.readthedocs.io/en/stable/	IPython
+copier	site	https://copier.readthedocs.io/en/stable/	Copier
+build	site	https://build.pypa.io/en/stable/	build
+hatchling	site	https://hatch.pypa.io/latest/	Hatch and Hatchling
+mkdocs	site	https://www.mkdocs.org/	MkDocs
+mkdocs-material	site	https://squidfunk.github.io/mkdocs-material/	Material for MkDocs
+mkdocstrings	site	https://mkdocstrings.github.io/	mkdocstrings
+marimo	site	https://docs.marimo.io/	marimo
 
-# Tool docs (tools are in manifest/packages.txt as uv tools or are binaries)
-uv	mkdocs	https://github.com/astral-sh/uv	docs/
-ruff	mkdocs	https://github.com/astral-sh/ruff	docs/
-pytest	sphinx	https://github.com/pytest-dev/pytest	doc/en/
-mkdocs	mkdocs	https://github.com/mkdocs/mkdocs	docs/
-marimo	mkdocs	https://github.com/marimo-team/marimo	docs/
+# CLI and terminal
+typer	site	https://typer.tiangolo.com/	Typer
+click	site	https://click.palletsprojects.com/en/stable/	Click
+rich	site	https://rich.readthedocs.io/en/stable/	Rich
+tqdm	site	https://tqdm.github.io/	tqdm
+
+# Data
+polars	site	https://docs.pola.rs/	Polars
+pandas	zip	https://pandas.pydata.org/pandas-docs/stable/pandas.zip	pandas
+numpy	zip	https://numpy.org/doc/stable/numpy-html.zip	NumPy
+pyarrow	site	https://arrow.apache.org/docs/python/	PyArrow
+duckdb	site	https://duckdb.org/docs/stable/	DuckDB
+openpyxl	site	https://openpyxl.readthedocs.io/en/stable/	openpyxl
+matplotlib	site	https://matplotlib.org/stable/	Matplotlib
+
+# Web and HTTP
+httpx	site	https://www.python-httpx.org/	HTTPX
+requests	site	https://requests.readthedocs.io/en/latest/	Requests
+fastapi	site	https://fastapi.tiangolo.com/	FastAPI
+uvicorn	site	https://uvicorn.dev/	Uvicorn
+starlette	site	https://starlette.dev/	Starlette
+jinja2	site	https://jinja.palletsprojects.com/en/stable/	Jinja
+pydantic	site	https://docs.pydantic.dev/latest/	Pydantic (includes pydantic-settings)
+beautifulsoup4	site	https://www.crummy.com/software/BeautifulSoup/bs4/doc/	Beautiful Soup
+lxml	site	https://lxml.de/	lxml
+
+# Databases
+sqlalchemy	site	https://docs.sqlalchemy.org/en/20/	SQLAlchemy 2.0
+alembic	site	https://alembic.sqlalchemy.org/en/latest/	Alembic
+psycopg	site	https://www.psycopg.org/psycopg3/docs/	Psycopg 3
+sqlite-utils	site	https://sqlite-utils.datasette.io/en/stable/	sqlite-utils
+
+# Config, serialization, time
+pyyaml	site	https://pyyaml.org/wiki/PyYAMLDocumentation	PyYAML
+python-dotenv	site	https://saurabh-kumar.com/python-dotenv/	python-dotenv
+attrs	site	https://www.attrs.org/en/stable/	attrs
+python-dateutil	site	https://dateutil.readthedocs.io/en/stable/	dateutil
+
+# Testing extras
+hypothesis	site	https://hypothesis.readthedocs.io/en/latest/	Hypothesis
+pytest-asyncio	site	https://pytest-asyncio.readthedocs.io/en/latest/	pytest-asyncio
+pytest-xdist	site	https://pytest-xdist.readthedocs.io/en/stable/	pytest-xdist
+faker	site	https://faker.readthedocs.io/en/master/	Faker
+
+# System and files
+watchfiles	site	https://watchfiles.helpmanual.io/	watchfiles
+psutil	site	https://psutil.readthedocs.io/en/latest/	psutil
+platformdirs	site	https://platformdirs.readthedocs.io/en/latest/	platformdirs
+
+# No docs site beyond the README (served from the wheel's metadata via pydoc): tomli-w, orjson,
+# freezegun, anthropic (its docs site is the whole Claude platform; too large to mirror).

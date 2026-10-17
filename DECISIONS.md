@@ -23,3 +23,11 @@ Dated. Append, never rewrite. Agent-facing.
 - Harvested texts stay in `store/`, never in the repo; several are CC BY-NC, fine for local use, not for redistribution.
 - Site front page links `python -m pydoc -p <port>` (docstrings of everything installed) as a second search, zero harvest cost.
 - Local coding model: out of scope for pyark; possible separate add-on.
+
+## 2026-10-17 — docs harvest and site
+
+- Docs are wget mirrors of published sites (`site` kind), not local builds: Read the Docs no longer serves HTML zips for most projects (probe 2026-10-17: only pytest, pytest-cov, build, rich did) and each project's doc build needs its own toolchain. Exceptions: Python, pandas, numpy ship zips (`zip` kind); Arch Wiki is extracted from the stored pacman package (`pacman` kind).
+- Per-site cap `PYARK_DOCS_QUOTA` (default 500m). CDN-hosted assets (fonts, some JS) are not fetched; pages still read.
+- Library docs are entries in `manifest/docs.txt` whose id equals the package name; `pyark doctor` can diff against `packages.txt`. No source for: tomli-w, orjson, freezegun, anthropic.
+- Site: mkdocs-material from the wheelhouse, built into `store/site`, `store/docs` symlinked as `/ref`, served by `python -m http.server` on `localhost:8800`. Reference page generated at build from manifest + store state.
+- Search: mkdocs search covers the guides only. One search over all mirrored docs is OPEN; candidate is pagefind (static index over any HTML tree, pip-installable). pydoc is per project (`uv run python -m pydoc -b`), not a global server.
