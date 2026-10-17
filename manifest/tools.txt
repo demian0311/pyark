@@ -1,0 +1,9 @@
+# pyark manifest/tools.txt — CLI tools install/python.sh installs with `uv tool install`,
+# from store/wheels, into ~/.local/bin. One `uv tool install` argument list per line.
+# ruff and ty are NOT here: they come from store/arch as pacman packages.
+pre-commit
+ipython
+copier
+build
+marimo
+mkdocs --with mkdocs-material --with mkdocstrings[python]

@@ -19,3 +19,22 @@ manifest() { grep -vE '^\s*(#|$)' "$PYARK_ROOT/manifest/$1.txt"; }
 stamp() { date -u +%Y-%m-%dT%H:%MZ > "$1/HARVESTED"; }
 
 store_dir() { local d="$PYARK_STORE/$1"; mkdir -p "$d"; printf '%s' "$d"; }
+
+# ensure_uv → sets $UV to the uv binary that matches store/arch (extracted into store/bin),
+# falling back to uv on PATH. Harvest and install must use the same uv version, because
+# uv's own table decides which Python build URL it asks the mirror for.
+ensure_uv() {
+  UV="$PYARK_STORE/bin/uv"
+  if [ ! -x "$UV" ]; then
+    local pkg; pkg=$(ls "$PYARK_STORE"/arch/uv-*.pkg.tar.zst 2>/dev/null | sort -V | tail -1 || true)
+    if [ -n "$pkg" ]; then
+      mkdir -p "$PYARK_STORE/bin"
+      tar -xf "$pkg" -O usr/bin/uv > "$UV" && chmod +x "$UV"
+      log "uv: extracted $("$UV" --version) from store/arch"
+    elif command -v uv >/dev/null; then
+      UV=$(command -v uv); warn "uv: store has no uv package, using $UV ($($UV --version))"
+    else
+      die "uv: not in store/arch and not on PATH — run: pyark harvest arch"
+    fi
+  fi
+}

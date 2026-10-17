@@ -70,7 +70,7 @@ platformdirs
 # Docs and packaging
 mkdocs
 mkdocs-material
-mkdocstrings
+mkdocstrings[python]
 hatchling
 
 # Notebooks
