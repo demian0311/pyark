@@ -31,3 +31,11 @@ Dated. Append, never rewrite. Agent-facing.
 - Library docs are entries in `manifest/docs.txt` whose id equals the package name; `pyark doctor` can diff against `packages.txt`. No source for: tomli-w, orjson, freezegun, anthropic.
 - Site: mkdocs-material from the wheelhouse, built into `store/site`, `store/docs` symlinked as `/ref`, served by `python -m http.server` on `localhost:8800`. Reference page generated at build from manifest + store state.
 - Search: mkdocs search covers the guides only. One search over all mirrored docs is OPEN; candidate is pagefind (static index over any HTML tree, pip-installable). pydoc is per project (`uv run python -m pydoc -b`), not a global server.
+
+## 2026-10-17 — nvim layer
+
+- One file, `nvim/lua/plugins/pyark-python.lua`, copied into `~/.config/nvim/lua/plugins/`. Imports LazyVim's `lang.python` extra with `vim.g.lazyvim_python_lsp = "ty"`; `ty` and `ruff` get `mason = false` (binaries from the pacman packages). Treesitter `ensure_installed` is the list `harvest/nvim.sh` installs online.
+- Store holds `~/.local/share/nvim/{lazy,site/parser,site/queries,mason}` and the lockfile. Install rsyncs without `--delete` and merges the lockfile (store wins per plugin), then `Lazy! restore` offline.
+- Wheelhouse now also covers `manifest/tools.txt` names (debugpy was missing). `debugpy-adapter` lands on PATH from `uv tool install debugpy`; the extra's dap-python setup uses it, but dap-python itself only loads with the `dap.core` extra, which is the user's choice.
+- Verified 2026-10-17 headless with ruff/ty extracted from the store onto PATH: both attach to a .py buffer, 3 diagnostics. Not yet verified with the pacman-installed binaries (sudo step pending).
+- Omarchy's lazy config has `checker.enabled = true`; offline this fails silently (`notify = false`). Left alone; documented on the site's nvim page.

@@ -61,4 +61,4 @@ if command -v uv >/dev/null; then
 fi
 
 echo
-echo "not built yet (as of 2026-10-17): nvim layer, docs harvest, site, pyark new"
+echo "not built yet (as of 2026-10-17): pyark new"

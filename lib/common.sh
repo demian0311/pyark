@@ -38,3 +38,14 @@ ensure_uv() {
     fi
   fi
 }
+
+# install_nvim_layer → copies nvim/lua/plugins/pyark-*.lua into the live LazyVim config.
+# Used by both harvest/nvim.sh (lazy must know the extra's plugins to fetch them) and install/nvim.sh.
+NVIM_CONFIG="${NVIM_CONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/nvim}"
+NVIM_DATA="${NVIM_DATA:-${XDG_DATA_HOME:-$HOME/.local/share}/nvim}"
+install_nvim_layer() {
+  [ -f "$NVIM_CONFIG/lua/config/lazy.lua" ] || die "nvim: $NVIM_CONFIG is not a LazyVim config (Omarchy ships one)"
+  mkdir -p "$NVIM_CONFIG/lua/plugins"
+  cp "$PYARK_ROOT"/nvim/lua/plugins/pyark-*.lua "$NVIM_CONFIG/lua/plugins/"
+  log "nvim: layer in $NVIM_CONFIG/lua/plugins: $(ls "$PYARK_ROOT"/nvim/lua/plugins | paste -sd' ')"
+}

@@ -10,7 +10,9 @@ Run it once while online and it fills a **store**: Arch packages, CPython builds
 - **Two managed Pythons** (see `manifest/python.txt`) installed from a local mirror.
 - **A curated wheelhouse** (`manifest/packages.txt`) with every dependency, no source builds needed.
 - **CLI tools** on your PATH: ruff, ty, just, pre-commit, ipython, copier, build, marimo, mkdocs.
-- **Coming** (not built as of 2026-10-17): a Python-ready nvim layer, offline docs for every library in the manifest, a local docs site with guides, and `pyark new` for scaffolding projects.
+- **A Python-ready nvim**: LazyVim with ruff and ty as language servers, parsers and plugins restored from the store, nothing downloaded at runtime.
+- **A local docs site** (`pyark serve`, <http://localhost:8800>) with guides and the mirrored documentation of every library in the manifest, plus the Python docs, the Arch Wiki and a shelf of free books.
+- **Coming** (not built as of 2026-10-17): `pyark new` for scaffolding projects.
 
 ## Set up a new machine
 
@@ -32,6 +34,8 @@ pyark harvest            # arch + python + wheels (+ nvim + docs once they exist
 ```bash
 pyark install arch       # asks for your password: pacman -U of the stored packages
 pyark install python     # writes ~/.config/uv/uv.toml, installs Pythons and tools
+pyark install nvim       # adds the Python layer to LazyVim, restores plugins from the store
+pyark install site       # builds the docs site; `pyark serve` opens it on localhost:8800
 pyark doctor             # every line should be a green tick
 ```
 
@@ -66,10 +70,12 @@ To change Python versions: edit `manifest/python.txt` (first line is the default
 
 | Path | What |
 |---|---|
-| `bin/pyark` | the one command: `harvest`, `install`, `doctor`, and soon `serve`, `new` |
+| `bin/pyark` | the one command: `harvest`, `install`, `serve`, `doctor`, and soon `new` |
 | `harvest/*.sh` | one script per store part, run online |
 | `install/*.sh` | one script per target, run offline |
 | `manifest/*.txt` | what to fetch: packages, tools, Arch packages, Python versions, docs |
+| `nvim/` | the LazyVim layer `pyark install nvim` copies into `~/.config/nvim` |
+| `site/` | mkdocs source of the local docs site |
 | `lib/common.sh` | shared shell: paths, logging, manifest reader, uv bootstrap |
 | `store/` | the harvested material, gitignored |
 | `mockups/` | dated design pages |
