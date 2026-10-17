@@ -1,0 +1,285 @@
+<title>pyark Shape</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (68ch) with a wide cargo-manifest table for the package list */
+:root{
+  --bg:#f6f7f4; --fg:#1c2430; --mute:#5b6675; --line:#d5dad2; --panel:#eceee8;
+  --accent:#1f4e79; --brass:#9a6b12; --ok:#2f7a3d; --warn:#9a5a12; --bad:#9a2a2a;
+  --display:"Bricolage Grotesque",Georgia,serif; --body:"Public Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a21; --fg:#e4e8e2; --mute:#98a3b0; --line:#2b3540; --panel:#1c242d;
+  --accent:#7fb2e6; --brass:#d8a845; --ok:#6fc07f; --warn:#d8a845; --bad:#e07a7a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a21; --fg:#e4e8e2; --mute:#98a3b0; --line:#2b3540; --panel:#1c242d;
+  --accent:#7fb2e6; --brass:#d8a845; --ok:#6fc07f; --warn:#d8a845; --bad:#e07a7a; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);padding-block:32px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:68ch;margin:0 auto}
+h1{font:700 clamp(40px,8vw,64px)/1 var(--display);margin:0;letter-spacing:-.02em;text-wrap:balance}
+h2{font:700 26px/1.2 var(--display);margin:48px 0 12px;text-wrap:balance}
+h3{font:600 17px/1.3 var(--body);margin:20px 0 6px}
+p{margin:0 0 12px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-bottom:12px}
+.sub{color:var(--mute);margin-top:12px}
+code,pre{font-family:var(--mono);font-size:.9em}
+pre{background:var(--panel);border:1px solid var(--line);padding:14px 16px;overflow-x:auto;margin:0 0 16px;line-height:1.45}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch;margin:16px 0 20px}
+.flow .box{background:var(--panel);border:1px solid var(--line);padding:12px 14px;min-width:0}
+.flow .box b{display:block;font-family:var(--display);font-size:18px;margin-bottom:4px}
+.flow .box span{color:var(--mute);font-size:14px}
+.flow .arr{align-self:center;color:var(--brass);font-size:22px}
+@media (max-width:560px){.flow{grid-template-columns:1fr}.flow .arr{transform:rotate(90deg);justify-self:center}}
+.opts{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin:12px 0}
+.opt{border:1px solid var(--line);padding:14px 16px;min-width:0}
+.opt.rec{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.opt h3{margin:0 0 6px}
+.opt .tag{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.opt p{font-size:14.5px;margin:6px 0 0}
+.opt .mini{background:var(--panel);border:1px solid var(--line);font:12px/1.5 var(--mono);padding:10px;margin:8px 0;white-space:pre;overflow-x:auto}
+/* manifest */
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);z-index:2}
+.bar .n{font:500 14px var(--mono);color:var(--mute);font-variant-numeric:tabular-nums}
+button{font:600 14px var(--body);color:var(--bg);background:var(--accent);border:0;padding:8px 14px;cursor:pointer}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.cat{margin:22px 0 6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cat h3{margin:0}
+.cat small{color:var(--mute);font-family:var(--mono);font-size:12px}
+.row{display:grid;grid-template-columns:22px 15ch 1fr;gap:10px;align-items:baseline;padding:6px 0;border-bottom:1px dashed var(--line);min-width:0}
+.row label{font-family:var(--mono);font-weight:500}
+.row .why{color:var(--mute);font-size:14px;min-width:0}
+.row .heavy{color:var(--warn);font:500 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;margin-left:6px}
+.row input{width:16px;height:16px;accent-color:var(--accent);margin:0;position:relative;top:2px}
+.row.off label,.row.off .why{color:var(--mute);text-decoration:line-through;opacity:.7}
+@media (max-width:480px){.row{grid-template-columns:22px 1fr}.row .why{grid-column:2}}
+.toast{font:500 13px var(--mono);color:var(--ok);min-height:1.2em}
+ul{padding-left:20px}li{margin:4px 0}
+.q li{margin:8px 0}
+</style>
+<main>
+<div class="eyebrow">Mockup · 2026-10-17 · pyark</div>
+<h1>An offline Python dev world on Omarchy</h1>
+<p class="sub">Scripts that fill a store while online, then build a full Python workstation from that store with no network: toolchain, curated libraries, their docs, a local docs site, and a Python-ready nvim.</p>
+
+<h2>The problem</h2>
+<p>Omarchy gives you a finished desktop, but Python development on it assumes a live network at every step: uv fetches interpreters, pip fetches wheels, nvim's Mason fetches language servers, and every "how do I" is a browser tab. Lose the network and the machine is a text editor. There is no single place that says how to start a project here, which tools are blessed, or where the docs are.</p>
+
+<h2>The shape</h2>
+<div class="flow">
+  <div class="box"><b>harvest</b><span>Runs online. Downloads Arch packages, Python builds, wheels, nvim plugins, language servers and HTML docs into the store.</span></div>
+  <div class="arr">→</div>
+  <div class="box"><b>store/</b><span>A plain directory. Gitignored. Lives on this disk or a USB drive. Everything install needs, nothing else.</span></div>
+  <div class="arr">→</div>
+  <div class="box"><b>install</b><span>Runs offline. Points pacman, uv and nvim at the store, builds the docs site, serves it on localhost.</span></div>
+</div>
+<p>Everything else is a consumer of the store: the docs site reads from it, <code>pyark new</code> scaffolds from a template in it, nvim loads plugins from it.</p>
+
+<h3>Repo layout</h3>
+<pre>pyark/
+├── bin/            pyark (one entry point: harvest · install · serve · new · doctor)
+├── harvest/        one script per source: arch.sh  python.sh  wheels.sh  nvim.sh  docs.sh
+├── install/        one script per target: arch.sh  python.sh  nvim.sh  site.sh
+├── manifest/       what to fetch — packages.txt  arch.txt  docs.txt  nvim-plugins.txt
+├── templates/      copier template for a new project (pyproject, ruff, pytest, justfile)
+├── nvim/           LazyVim config layered on yours: python extra, store-backed plugin dir
+├── site/           mkdocs source: your pages + generated index of harvested docs
+├── mockups/        dated pages like this one
+└── store/          gitignored · ~/.local/share/pyark or a USB mount</pre>
+
+<h3>A day with it</h3>
+<ul>
+  <li><code>pyark new invoices</code> makes a project with a venv, ruff, pytest and a justfile, from the store, in under a second.</li>
+  <li><code>uv add polars</code> resolves against the local wheelhouse. A package not in the manifest fails fast with "not in store".</li>
+  <li><code>pyark serve</code> opens <code>localhost:8800</code>: your guides on the left, every harvested library's docs under one search.</li>
+  <li><code>nvim</code> opens with completion, diagnostics and formatting on save. No download prompt, ever.</li>
+  <li><code>pyark doctor</code> says what the store holds, what is stale, and what the last harvest skipped.</li>
+</ul>
+
+<h2>Options: where the docs live</h2>
+<p>The biggest UX decision. The store can hold docs in three forms.</p>
+<div class="opts">
+  <div class="opt rec"><span class="tag">🟢 recommended</span><h3>mkdocs hub + raw HTML docs</h3>
+    <div class="mini">localhost:8800
+├ Guides        your pages
+├ Python 3.14   docs.python.org zip
+├ polars        htmlzip from readthedocs
+├ fastapi       mkdocs build of the repo
+└ Search        one index over all</div>
+    <p>One static server, one search. Your guides link straight into a library's page. Cost: each library needs a known way to get its HTML, and about a third will need a per-library rule.</p></div>
+  <div class="opt"><span class="tag">🟡 viable</span><h3>Zeal docsets</h3>
+    <div class="mini">Zeal (GUI)
+├ Python 3
+├ pandas
+└ Django
+(no custom pages)</div>
+    <p>Zeal, the offline docset browser, has instant search and a GUI. But it is a separate app, docsets exist for only the big libraries, and your own guides cannot live in it.</p></div>
+  <div class="opt"><span class="tag">🔴 advise against</span><h3>DevDocs mirror</h3>
+    <div class="mini">devdocs/
+├ Ruby + thor scraper
+├ per-library scrapers
+└ ~GBs</div>
+    <p>Beautiful and unified, but it drags a Ruby toolchain into the harvest and its scrapers break with each library release.</p></div>
+</div>
+
+<h2>Options: type checker</h2>
+<div class="opts">
+  <div class="opt rec"><span class="tag">🟢 recommended</span><h3>ty or pyrefly</h3><p>Single binary, no node. Both are young; the harvest keeps pyright as a fallback until one proves out on your code.</p></div>
+  <div class="opt"><span class="tag">🟡 viable</span><h3>basedpyright</h3><p>Mature and what LazyVim expects, but it needs node, so node and its tarball join the store.</p></div>
+</div>
+
+<h2>Curate the library manifest</h2>
+<p>This is the draft <code>manifest/packages.txt</code>. Untick what you will never use. Tick what is missing with the field at the bottom. Then <b>Copy manifest</b> and paste it back to me. Each kept library also gets its docs harvested where an HTML build exists. <span class="heavy" style="margin:0">heavy</span> marks a package over roughly 200 MB with its dependencies.</p>
+<div class="bar"><span class="n" id="count"></span><button id="copy">Copy manifest</button><button class="ghost" id="reset">Reset to defaults</button><span class="toast" id="toast"></span></div>
+<div id="manifest"></div>
+<div class="row" style="border:0;grid-template-columns:22px 1fr"><span></span><span><input id="add" type="text" placeholder="add a package, press Enter" style="font:14px var(--mono);padding:6px 8px;border:1px solid var(--line);background:var(--panel);color:var(--fg);width:100%;max-width:40ch;box-sizing:border-box"></span></div>
+
+<h2>Open questions</h2>
+<ul class="q">
+  <li><b>Is the target this laptop when offline, or a second air-gapped machine?</b> Both work with the store on a USB drive, but the second needs the store to carry Omarchy's own packages too.</li>
+  <li><b>Jupyter or marimo for notebooks, or neither?</b> JupyterLab alone is a large slice of the store.</li>
+  <li><b>How much of your current LazyVim config is sacred?</b> The nvim layer can be a few files added to it, or a separate config started with <code>NVIM_APPNAME=pyark</code>.</li>
+  <li><b>Store size budget.</b> The manifest above lands near 3 to 6 GB without the heavy ones. With them, 15 GB or more.</li>
+</ul>
+</main>
+<script>
+const CATS=[
+["Tools (installed with uv tool, not per project)",[
+["ruff","lint and format, replaces flake8/black/isort",1],
+["ty","Astral's type checker, single binary",1],
+["pyrefly","Meta's type checker, single binary; the fallback to ty",0],
+["basedpyright","mature type checker; pulls node into the store",0,1],
+["pytest","test runner",1],
+["pytest-cov","coverage reporting for pytest",1],
+["pre-commit","git hooks runner",1],
+["ipython","better REPL",1],
+["copier","project templates; what pyark new uses",1],
+["nox","task sessions across Python versions",0],
+["pip-audit","checks dependencies against known vulnerabilities",0],
+["build","builds sdist and wheel",1],
+["twine","uploads to a package index",0],
+["pyinstaller","freezes a project to one binary",0,1],
+]],
+["CLI and terminal",[
+["typer","typed CLI apps",1],
+["click","classic CLI framework; typer builds on it",1],
+["rich","terminal formatting, tables, progress",1],
+["textual","terminal UIs",0],
+["tqdm","progress bars",1],
+["prompt-toolkit","interactive prompts",0],
+]],
+["Data",[
+["polars","fast dataframes",1],
+["pandas","dataframes, the common denominator",1],
+["numpy","arrays",1],
+["pyarrow","columnar storage, parquet",1,1],
+["duckdb","SQL over files and dataframes",1],
+["openpyxl","read and write xlsx",1],
+["scipy","scientific computing",0,1],
+["scikit-learn","classic machine learning",0,1],
+["torch","deep learning; multiple GB",0,1],
+]],
+["Plotting",[
+["matplotlib","the standard plotting library",1],
+["plotly","interactive plots",0],
+["seaborn","statistical plots on matplotlib",0],
+]],
+["Web and HTTP",[
+["httpx","sync and async HTTP client",1],
+["requests","the classic HTTP client",1],
+["fastapi","typed web APIs",1],
+["uvicorn","ASGI server",1],
+["starlette","ASGI toolkit under fastapi",1],
+["flask","small web apps",0],
+["django","full web framework",0,1],
+["jinja2","templates",1],
+["pydantic","data validation and settings",1],
+["pydantic-settings","settings from env and files",1],
+["beautifulsoup4","HTML parsing",1],
+["lxml","fast XML and HTML",1],
+["playwright","browser automation; downloads browsers",0,1],
+]],
+["Databases",[
+["sqlalchemy","ORM and SQL toolkit",1],
+["alembic","schema migrations for sqlalchemy",1],
+["psycopg","PostgreSQL driver",1],
+["asyncpg","async PostgreSQL driver",0],
+["sqlite-utils","CLI and library for sqlite",1],
+]],
+["Config, serialization, time",[
+["pyyaml","YAML",1],
+["tomli-w","write TOML",1],
+["orjson","fast JSON",1],
+["msgspec","fast typed serialization",0],
+["python-dotenv","load .env files",1],
+["attrs","classes without boilerplate",1],
+["cattrs","structure and unstructure attrs",0],
+["python-dateutil","date parsing and arithmetic",1],
+["whenever","strict datetime library",0],
+]],
+["Testing extras",[
+["hypothesis","property-based testing",1],
+["pytest-asyncio","async tests",1],
+["pytest-xdist","parallel tests",1],
+["faker","fake data",1],
+["freezegun","freeze time in tests",1],
+["respx","mock httpx",0],
+]],
+["System and files",[
+["watchfiles","file watching",1],
+["psutil","process and system info",1],
+["paramiko","SSH",0],
+["pexpect","drive interactive programs",0],
+["platformdirs","XDG paths",1],
+]],
+["Notebooks",[
+["marimo","reactive notebooks as .py files",0],
+["jupyterlab","classic notebooks",0,1],
+]],
+["Docs and packaging",[
+["mkdocs","static docs site; what pyark serve builds",1],
+["mkdocs-material","theme for mkdocs",1],
+["mkdocstrings","API docs from docstrings",1],
+["sphinx","the other docs builder",0],
+["hatchling","build backend",1],
+]],
+["AI",[
+["anthropic","Claude API client",1],
+]]];
+const KEY="pyark-manifest-v1";
+let state={};try{state=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+let extra=[];try{extra=JSON.parse(localStorage.getItem(KEY+"-extra")||"[]")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));localStorage.setItem(KEY+"-extra",JSON.stringify(extra))}catch(e){}}
+function on(name,def){return name in state?state[name]:!!def}
+function render(){
+  const root=document.getElementById("manifest");root.innerHTML="";let total=0,kept=0;
+  const cats=CATS.concat(extra.length?[["Added by you",extra.map(n=>[n,"",1])]]:[]);
+  for(const [cat,pk] of cats){
+    const h=document.createElement("div");h.className="cat";
+    const k=pk.filter(p=>on(p[0],p[2])).length;
+    h.innerHTML=`<h3>${cat}</h3><small>${k}/${pk.length}</small>`;root.appendChild(h);
+    for(const [n,why,def,heavy] of pk){
+      total++;const c=on(n,def);if(c)kept++;
+      const r=document.createElement("div");r.className="row"+(c?"":" off");
+      r.innerHTML=`<input type="checkbox" id="p-${n}" ${c?"checked":""}><label for="p-${n}">${n}</label><span class="why">${why}${heavy?'<span class="heavy">heavy</span>':""}</span>`;
+      r.querySelector("input").addEventListener("change",e=>{state[n]=e.target.checked;save();render()});
+      root.appendChild(r);
+    }
+  }
+  document.getElementById("count").textContent=`${kept} of ${total} kept`;
+}
+document.getElementById("copy").addEventListener("click",()=>{
+  const lines=["# pyark manifest/packages.txt — curated "+new Date().toISOString().slice(0,10)];
+  for(const [cat,pk] of CATS.concat(extra.length?[["Added by you",extra.map(n=>[n,"",1])]]:[])){
+    const k=pk.filter(p=>on(p[0],p[2]));if(!k.length)continue;
+    lines.push("","# "+cat);k.forEach(p=>lines.push(p[0]));
+  }
+  const txt=lines.join("\n");const t=document.getElementById("toast");
+  navigator.clipboard.writeText(txt).then(()=>{t.textContent="copied — paste it back to Claude"},()=>{
+    const ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="width:100%;height:200px;font:13px var(--mono)";document.getElementById("manifest").prepend(ta);ta.select();t.textContent="select and copy the text above"});
+});
+document.getElementById("reset").addEventListener("click",()=>{state={};extra=[];save();render();document.getElementById("toast").textContent="reset"});
+document.getElementById("add").addEventListener("keydown",e=>{if(e.key!=="Enter")return;const v=e.target.value.trim().toLowerCase();if(!v)return;if(!extra.includes(v))extra.push(v);state[v]=true;e.target.value="";save();render()});
+render();
+</script>
