@@ -8,7 +8,7 @@ just            # lists the tasks: test, check, fmt, cov, reset
 uv add polars httpx
 ```
 
-`pyark new` lays out a `src/` package with a test, a `pyproject.toml` with ruff, pytest and ty configured, a `justfile`, a `.gitignore`, and a `.python-version` pinned to the store's default Python. It then runs `uv sync`, which creates `.venv` and `uv.lock` from the store, and makes the first git commit. Options, all passed as `-d key=value`: `cli=true` adds a typer command named after the project, `python_version=3.13` picks another stored Python.
+`pyark new` lays out a `src/` package with a test, a `pyproject.toml` with ruff, pytest and ty configured, a `justfile`, a `.gitignore`, and a `.python-version` pinned to the store's default Python. It then runs `uv sync`, which creates `.venv` and `uv.lock` from the store, and makes the first git commit. Options are passed as `-d key=value`: `cli=true` adds a typer command named after the project, `description="..."` fills pyproject and the README.
 
 For a throwaway, `uv init scratch` is enough: `pyproject.toml`, `main.py`, nothing else.
 
@@ -23,9 +23,9 @@ For a throwaway, `uv init scratch` is enough: `pyproject.toml`, `main.py`, nothi
 | the REPL with the project importable | `uv run ipython` |
 | a notebook | `marimo edit notebook.py` |
 
-**Pick a Python version**
+**The Python version**
 
-`uv python list --only-installed` shows what the store provided. `uv init --python 3.13` or `uv python pin 3.13` inside a project switches.
+There is one, pinned in `manifest/python.txt`, and every project uses it. `uv python list --only-installed` shows it.
 
 **A library without a project**
 

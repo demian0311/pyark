@@ -15,6 +15,13 @@ need() { for c in "$@"; do command -v "$c" >/dev/null || die "missing command: $
 # manifest <name>  → the non-comment, non-blank lines of manifest/<name>.txt
 manifest() { grep -vE '^\s*(#|$)' "$PYARK_ROOT/manifest/$1.txt"; }
 
+# python_version → the single version in manifest/python.txt (pyark supports exactly one)
+python_version() {
+  local n; n=$(manifest python | wc -l)
+  [ "$n" -eq 1 ] || die "manifest/python.txt must hold exactly one version (has $n)"
+  manifest python
+}
+
 # stamp <dir>  → writes <dir>/HARVESTED with the date, so `pyark doctor` can report age
 stamp() { date -u +%Y-%m-%dT%H:%MZ > "$1/HARVESTED"; }
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Mirror the CPython builds uv would download for each version in manifest/python.txt
+# Mirror the CPython build uv would download for the version in manifest/python.txt
 # into store/python, laid out so UV_PYTHON_INSTALL_MIRROR=file://store/python works:
 # the path after .../releases/download/ is kept as-is. Only x86_64 Linux gnu, not free-threaded.
 source "$(dirname "$0")/../lib/common.sh"
@@ -7,7 +7,7 @@ need curl tar
 ensure_uv
 
 dir=$(store_dir python)
-for ver in $(manifest python); do
+for ver in $(python_version); do
   url=$("$UV" python list --only-downloads --show-urls "cpython@$ver" 2>/dev/null \
         | grep -E 'cpython-[0-9.]+-linux-x86_64-gnu\s' | grep -v -- '+freethreaded' | awk '{print $2}' | head -1)
   [ -n "$url" ] || die "python: uv lists no x86_64 linux download for $ver"

@@ -1,21 +1,25 @@
 # Built by install/site.sh into store/site. docs/reference.md is generated there, not here.
+# Look: the slate palette (https://diagrammo.app/slate/), tokens in docs/assets/slate.css.
 site_name: pyark
 site_url: http://localhost:8800/
 use_directory_urls: true
 theme:
   name: material
+  font: false                 # fonts are vendored in assets/fonts; nothing loads from Google
+  icon: { logo: material/package-variant-closed }
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: blue grey
-      accent: amber
+      primary: custom
+      accent: custom
       toggle: { icon: material/weather-night, name: Dark }
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: blue grey
-      accent: amber
+      primary: custom
+      accent: custom
       toggle: { icon: material/weather-sunny, name: Light }
-  features: [navigation.sections, navigation.footer, search.highlight, content.code.copy]
+  features: [navigation.sections, navigation.footer, navigation.top, search.highlight, content.code.copy]
+extra_css: [assets/slate.css]
 nav:
   - Home: index.md
   - Start a project: start-a-project.md
@@ -25,4 +29,4 @@ nav:
   - Editor (nvim): nvim.md
   - Reference docs: reference.md
 plugins: [search]
-markdown_extensions: [admonition, tables, pymdownx.superfences, pymdownx.highlight, toc]
+markdown_extensions: [admonition, attr_list, md_in_html, tables, pymdownx.superfences, pymdownx.highlight, toc]

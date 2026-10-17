@@ -19,6 +19,6 @@ When `uv add something` fails with a resolution error, the package is not in the
 - Python tools (installed in their own environment, on your PATH): `manifest/tools.txt`, then `pyark harvest wheels && pyark install python`.
 - Arch packages: `manifest/arch.txt`, then `pyark harvest arch && pyark install arch`. The install asks for your password.
 
-**Another Python version**
+**A newer Python**
 
-`manifest/python.txt`, one version per line, first line is the default. Then `pyark harvest python && pyark harvest wheels && pyark install python`.
+pyark supports exactly one version. Change the line in `manifest/python.txt`, then while online: `pyark harvest python && pyark harvest wheels && pyark harvest docs && pyark install python`. Projects follow via `uv python pin`.

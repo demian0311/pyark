@@ -7,7 +7,7 @@ Run it once while online and it fills a **store**: Arch packages, CPython builds
 ## What you get
 
 - **uv** configured so `uv init`, `uv add`, `uv run` and `uv tool install` work with the network down.
-- **Two managed Pythons** (see `manifest/python.txt`) installed from a local mirror.
+- **One Python**, pinned in `manifest/python.txt`, installed from a local mirror. pyark is opinionated: one interpreter, every project on it.
 - **A curated wheelhouse** (`manifest/packages.txt`) with every dependency, no source builds needed.
 - **CLI tools** on your PATH: ruff, ty, just, pre-commit, ipython, copier, build, marimo, mkdocs.
 - **A Python-ready nvim**: LazyVim with ruff and ty as language servers, parsers and plugins restored from the store, nothing downloaded at runtime.
@@ -64,7 +64,7 @@ To add a library: put its name in `manifest/packages.txt`, then `pyark harvest w
 
 To add a CLI tool: `manifest/tools.txt` for Python tools (installed with `uv tool`), `manifest/arch.txt` for pacman packages.
 
-To change Python versions: edit `manifest/python.txt` (first line is the default), then `pyark harvest python && pyark install python`.
+To move to a newer Python: change the single line in `manifest/python.txt`, then `pyark harvest python && pyark harvest wheels && pyark harvest docs && pyark install python`.
 
 ## Layout
 
@@ -86,7 +86,7 @@ To change Python versions: edit `manifest/python.txt` (first line is the default
 
 - **Arch packages** are fetched with `pacman -Sp` (prints URLs, needs no root) and installed with `pacman -U` from the local files. No `pacman.conf` change.
 - **Pythons** are the python-build-standalone tarballs uv would download, stored in the layout uv's `python-install-mirror` setting expects, served with a `file://` URL.
-- **Wheels** are collected with `pip download` once per Python version. uv has no download-only command. Offline, uv's user config sets `no-index` and `find-links` to the wheelhouse.
+- **Wheels** are collected with `pip download` for the one Python version. uv has no download-only command. Offline, uv's user config sets `no-index` and `find-links` to the wheelhouse.
 - **The uv that harvests is the uv that installs**: it is extracted from the stored Arch package, so the Python build URLs match.
 
 Licenses of harvested material belong to their projects. Nothing harvested is committed to this repo.

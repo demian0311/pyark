@@ -52,3 +52,10 @@ Dated. Append, never rewrite. Agent-facing.
 - Never edit `harvest/docs.sh` while a harvest runs: bash reads the script incrementally; the running copy died with a syntax error at the last entry (platformdirs completed, summary never printed).
 - `PYARK_DOCS_ONLY="a b"` re-mirrors chosen entries; delete the entry's directory first when the scoping changed, wget --mirror never removes files.
 - Re-mirror results 2026-10-17: FastAPI 363→40 MB (translations), lxml 507→13 MB (release files AND per-version doc copies `lxml.de/N.N/`), Polars 394 MB and Matplotlib 430 MB complete under a 1g cap. Store total ≈3.2 GB, docs ≈2.3 GB.
+
+## 2026-10-17 — one Python, trimmed SQLite, slate look
+
+- Exactly one Python version (`manifest/python.txt`, `python_version()` in lib dies otherwise). 3.13 removed from store (builds, cp313 wheels, docs) and from uv. Docs id for Python is plain `python`.
+- `manifest/docs.txt` columns: id, kind, source, title, description, opts. zip opts `entry=` and `prune=`; SQLite lands on docs.html with support/purchase/news/consortium pages and the CGI search binaries pruned (39→28 MB).
+- Site look: slate palette (https://diagrammo.app/slate/) via `site/docs/assets/slate.css` on Material; fonts Schibsted Grotesk / Inter / JetBrains Mono vendored (OFL) in `site/docs/assets/fonts`, `font: false` so nothing loads from Google. Reference page is generated HTML: nine hue-coded groups, name + description + "size · date" (no "harvested"). Home has four hue cards.
+- Visual check: headless Chromium screenshots (`chromium --headless=new --screenshot`), dark scheme followed the system.

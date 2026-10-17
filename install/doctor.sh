@@ -47,9 +47,9 @@ else bad "no uv.toml — run: pyark install python"; fi
 
 if command -v uv >/dev/null; then
   echo
-  echo "pythons (manifest/python.txt)"
+  echo "python (manifest/python.txt)"
   have=$(uv python list --only-installed --managed-python 2>/dev/null | awk '{print $1}')
-  for v in $(manifest python); do
+  for v in $(python_version); do
     grep -q "^cpython-$v\." <<<"$have" && ok "$v $(grep -m1 "^cpython-$v\." <<<"$have" | cut -d- -f2)" || bad "$v not installed — run: pyark install python"
   done
   echo

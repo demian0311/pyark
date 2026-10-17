@@ -1,0 +1,68 @@
+/* slate — the Diagrammo palette, applied to Material for MkDocs. Light on :root, dark under
+   Material's "slate" scheme. Nine categorical hues cycle through the reference groups. */
+@font-face { font-family: "Schibsted Grotesk"; src: url(fonts/schibsted-grotesk-latin.woff2) format("woff2"); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: "Inter"; src: url(fonts/inter-latin.woff2) format("woff2"); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url(fonts/jetbrains-mono-latin.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url(fonts/jetbrains-mono-latin-500.woff2) format("woff2"); font-weight: 500; font-display: swap; }
+
+:root, [data-md-color-scheme="default"] {
+  --slate-bg: #ffffff; --slate-surface: #f3f5f8; --slate-overlay: #eaeef3; --slate-border: #d4dae1;
+  --slate-text: #1f2933; --slate-muted: #5b6672; --slate-primary: #3b6ea5; --slate-accent: #3a9188;
+  --slate-red: #c0504d; --slate-orange: #cc7a33; --slate-yellow: #c9a227; --slate-green: #5b9357;
+  --slate-blue: #3b6ea5; --slate-purple: #7d5ba6; --slate-teal: #3a9188; --slate-cyan: #4f96c4; --slate-gray: #7e8a97;
+  --slate-orange-text: #a85d1a; --slate-yellow-text: #836611; --slate-green-text: #3f7a3b; --slate-purple-text: #6b4d8f; --slate-teal-text: #307a73;
+}
+[data-md-color-scheme="slate"] {
+  --slate-bg: #161b22; --slate-surface: #202833; --slate-overlay: #29323e; --slate-border: #38424f;
+  --slate-text: #e6eaef; --slate-muted: #9aa5b1; --slate-primary: #5b9bd5; --slate-accent: #45b3a3;
+  --slate-red: #e07b6e; --slate-orange: #e0975a; --slate-yellow: #d9bd5a; --slate-green: #74b56e;
+  --slate-blue: #5b9bd5; --slate-purple: #a585c9; --slate-teal: #45b3a3; --slate-cyan: #62b0d9; --slate-gray: #95a1ae;
+  --slate-orange-text: #e0975a; --slate-yellow-text: #d9bd5a; --slate-green-text: #74b56e; --slate-purple-text: #a585c9; --slate-teal-text: #45b3a3;
+}
+
+/* Material hooks */
+[data-md-color-scheme="default"], [data-md-color-scheme="slate"] {
+  --md-primary-fg-color: var(--slate-primary); --md-primary-fg-color--light: var(--slate-cyan); --md-primary-fg-color--dark: var(--slate-primary);
+  --md-primary-bg-color: #ffffff;
+  --md-accent-fg-color: var(--slate-accent);
+  --md-default-bg-color: var(--slate-bg); --md-default-fg-color: var(--slate-text);
+  --md-default-fg-color--light: var(--slate-muted); --md-default-fg-color--lighter: var(--slate-border); --md-default-fg-color--lightest: var(--slate-surface);
+  --md-typeset-color: var(--slate-text); --md-typeset-a-color: var(--slate-primary);
+  --md-code-bg-color: var(--slate-surface); --md-code-fg-color: var(--slate-text);
+  --md-typeset-table-color: var(--slate-border);
+  --md-footer-bg-color: var(--slate-surface); --md-footer-fg-color: var(--slate-text); --md-footer-bg-color--dark: var(--slate-overlay);
+  --md-text-font: "Inter"; --md-code-font: "JetBrains Mono";
+}
+[data-md-color-scheme="slate"] { --md-primary-bg-color: var(--slate-bg); --md-hue: 213; }
+.md-header { background: var(--slate-primary); }
+[data-md-color-scheme="slate"] .md-header { background: var(--slate-surface); color: var(--slate-text); border-bottom: 1px solid var(--slate-border); }
+[data-md-color-scheme="slate"] .md-search__input { background: var(--slate-overlay); }
+.md-typeset h1, .md-typeset h2, .md-typeset h3, .md-header__topic { font-family: "Schibsted Grotesk", "Inter", system-ui, sans-serif; letter-spacing: -0.01em; }
+.md-typeset h1 { color: var(--slate-text); font-weight: 700; }
+.md-typeset h2 { font-weight: 600; }
+.md-typeset code { border-radius: .25rem; }
+.md-typeset table:not([class]) th { background: var(--slate-surface); color: var(--slate-text); }
+
+/* Home: coloured cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .9rem; margin: 1.2rem 0 1.6rem; }
+.card { border: 1px solid var(--slate-border); border-top: 4px solid var(--hue, var(--slate-primary)); border-radius: .5rem; padding: .9rem 1rem .8rem; background: var(--slate-surface); }
+.card h3 { margin: 0 0 .35rem; font-size: 1.05rem; color: var(--hue, var(--slate-primary)); }
+.card p { margin: 0; font-size: .82rem; color: var(--slate-muted); }
+.card code { font-size: .75rem; }
+.md-typeset .card a { color: inherit; }
+.eyebrow { font: 500 .7rem/1 "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--slate-teal-text); margin-bottom: .4rem; }
+
+/* Reference: groups with a hue each */
+.ref-group { border-left: 4px solid var(--hue); padding: .1rem 0 .1rem 1rem; margin: 1.6rem 0; }
+.ref-group h2 { margin: 0 0 .5rem; color: var(--hue); font-size: 1.15rem; }
+.ref-list { list-style: none; padding: 0 !important; margin: 0 !important; }
+.ref-list li { display: grid; grid-template-columns: 11rem 1fr auto; gap: .8rem; align-items: baseline; padding: .4rem 0; border-bottom: 1px solid var(--slate-border); margin: 0 !important; }
+.ref-list li:last-child { border-bottom: 0; }
+.ref-list .name { font-weight: 600; }
+.ref-list .name a { color: var(--slate-text); }
+.ref-list .name a:hover { color: var(--hue); }
+.ref-list .desc { color: var(--slate-muted); font-size: .82rem; }
+.ref-list .meta { font: 400 .7rem/1.4 "JetBrains Mono", monospace; color: var(--slate-muted); white-space: nowrap; }
+.ref-list li.missing .name { color: var(--slate-red); }
+.ref-list li.missing .name::before { content: "✗ "; }
+@media (max-width: 44rem) { .ref-list li { grid-template-columns: 1fr; gap: .1rem; } }

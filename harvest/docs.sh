@@ -7,7 +7,7 @@
 source "$(dirname "$0")/../lib/common.sh"
 need wget curl bsdtar
 root=$(store_dir docs)
-mapfile -t vers < <(manifest python)
+ver=$(python_version)
 failed=()
 
 landing() { # landing <url> → path of the mirrored landing page relative to the mirror dir
@@ -16,7 +16,7 @@ landing() { # landing <url> → path of the mirrored landing page relative to th
   printf '%s' "$p"
 }
 
-do_zip() { # do_zip <dir> <url>
+do_zip() { # do_zip <dir> <url>   (reads $entry and $prune, set per entry from the manifest's opts column)
   local tmp; tmp=$(mktemp -d)
   if ! curl -fsSL --retry 3 -o "$tmp/docs.zip" "$2"; then rm -rf "$tmp"; return 1; fi
   mkdir -p "$1"
@@ -27,7 +27,10 @@ do_zip() { # do_zip <dir> <url>
     bsdtar -xf "$tmp/docs.zip" -C "$1"
   fi
   rm -rf "$tmp"
-  printf 'index.html' > "$1/ENTRY"
+  if [ -n "$prune" ]; then
+    ( cd "$1" && find . -mindepth 1 -regextype posix-extended -regex "\./($prune)" -exec rm -rf {} + )
+  fi
+  printf '%s' "${entry:-index.html}" > "$1/ENTRY"
 }
 
 do_site() { # do_site <dir> <url>   (reads $reject and $quota, set per entry from the manifest's 5th column)
@@ -54,11 +57,14 @@ do_pacman() { # do_pacman <dir> <package:path/inside/pkg>
   printf 'en/Main_page.html' > "$1/ENTRY"
 }
 
-harvest_one() { # harvest_one <id> <kind> <source> [opts]   opts: quota=1g,reject=<ERE>  (comma-separated)
+harvest_one() { # harvest_one <id> <kind> <source> [opts]
+  # opts, comma-separated: quota=1g reject=<ERE> (site) · entry=<file> prune=<ERE of paths to delete> (zip)
   local dir="$root/$1" opt
-  quota="${PYARK_DOCS_QUOTA:-500m}"; reject=""
+  quota="${PYARK_DOCS_QUOTA:-500m}"; reject=""; entry=""; prune=""
   IFS=, read -ra _opts <<<"${4:-}"
-  for opt in "${_opts[@]}"; do case "$opt" in quota=*) quota=${opt#quota=};; reject=*) reject=${opt#reject=};; esac; done
+  for opt in "${_opts[@]}"; do case "$opt" in
+    quota=*) quota=${opt#quota=};; reject=*) reject=${opt#reject=};; entry=*) entry=${opt#entry=};; prune=*) prune=${opt#prune=};;
+  esac; done
   if [ -f "$dir/HARVESTED" ] && [ -z "${PYARK_REFRESH:-}" ]; then log "docs: have $1"; return; fi
   log "docs: $1 ($2)"
   if "do_$2" "$dir" "$3"; then
@@ -68,13 +74,9 @@ harvest_one() { # harvest_one <id> <kind> <source> [opts]   opts: quota=1g,rejec
   fi
 }
 
-while IFS=$'\t' read -r id kind src title opts; do
+while IFS=$'\t' read -r id kind src title desc opts; do
   if [ -n "${PYARK_DOCS_ONLY:-}" ]; then case " $PYARK_DOCS_ONLY " in *" $id "*) ;; *) continue;; esac; fi
-  if [[ "$src" == *"{ver}"* ]]; then
-    for v in "${vers[@]}"; do harvest_one "$id-$v" "$kind" "${src//\{ver\}/$v}" "$opts"; done
-  else
-    harvest_one "$id" "$kind" "$src" "$opts"
-  fi
+  harvest_one "$id" "$kind" "${src//\{ver\}/$ver}" "$opts"
 done < <(manifest docs)
 
 stamp "$root"

@@ -1,9 +1,9 @@
 # pyark manifest/docs.txt — documentation harvest/docs.sh mirrors into store/docs/<id>/.
-# Format: id <TAB> kind <TAB> source <TAB> title [<TAB> opts]
-# opts (site kind only), comma-separated: quota=1g (per-site cap) and reject=<ERE> (extra URL
-# pattern to skip, e.g. other languages or a Rust API). Found by looking at what filled a mirror.
+# Format: id <TAB> kind <TAB> source <TAB> title <TAB> description [<TAB> opts]
+# opts, comma-separated. site: quota=1g (per-site cap), reject=<ERE> (URL pattern to skip, e.g. other
+# languages or a Rust API). zip: entry=<file> (landing page), prune=<ERE> (paths to delete after unpacking).
 # kinds:  zip     download a zip of built HTML and unpack it (strips the top-level dir).
-#                 {ver} expands once per version in manifest/python.txt (id gets -<ver>).
+#                 {ver} expands to the version in manifest/python.txt.
 #         site    wget --mirror of a published docs site, scoped below the URL's path.
 #                 Capped at $PYARK_DOCS_QUOTA per site (default 500m). CDN assets not fetched.
 #         pacman  extract the HTML tree from an Arch package already in store/arch.
@@ -11,88 +11,88 @@
 # (checked 2026-10-17: only pytest, pytest-cov, build, rich still did), and building each
 # project's docs needs that project's doc toolchain. A mirror of the published site is uniform.
 # Library ids match names in manifest/packages.txt so `pyark doctor` can report gaps.
+# No docs site beyond the README (readable via pydoc): tomli-w, orjson, freezegun, anthropic (its
+# docs site is the whole Claude platform, too large to mirror).
 # Every URL below returned 200 on 2026-10-17. The sqlite zip is versioned: find the current one
 # on https://sqlite.org/download.html under "Documentation" when refreshing.
 
 # Core reference
-python	zip	https://docs.python.org/{ver}/archives/python-{ver}-docs-html.zip	Python {ver} documentation
-packaging-guide	site	https://packaging.python.org/en/latest/	Python Packaging User Guide
-arch-wiki	pacman	arch-wiki-docs:usr/share/doc/arch-wiki/html	Arch Wiki
-sqlite	zip	https://sqlite.org/2026/sqlite-doc-3540100.zip	SQLite (the database; Python's sqlite3 module is in the Python docs)
+python	zip	https://docs.python.org/{ver}/archives/python-{ver}-docs-html.zip	Python {ver}	The language reference, the standard library and the tutorial
+packaging-guide	site	https://packaging.python.org/en/latest/	Python Packaging User Guide	pyproject, wheels, publishing: the official how-to
+arch-wiki	pacman	arch-wiki-docs:usr/share/doc/arch-wiki/html	Arch Wiki	The manual for the system Omarchy runs on
+sqlite	zip	https://sqlite.org/2026/sqlite-doc-3540100.zip	SQLite	The embedded database: SQL syntax, the C API, pragmas and file format	entry=docs.html,prune=(prosupport|consortium.*|support|crew|famous|mostdeployed|download|getthecode|news|oldnews|chronology|books|hirely|pressrelease-.*|copyright-release.*|codeofconduct|codeofethics|affcase1|aff_short)\.(html|pdf)|search|search\.d
 
 # Guides and books
-pro-git	site	https://git-scm.com/book/en/v2	Pro Git
-python-cheatsheet	site	https://gto76.github.io/python-cheatsheet/	Comprehensive Python Cheatsheet
-hitchhikers-guide	site	https://docs.python-guide.org/	The Hitchhiker's Guide to Python
-cosmicpython	site	https://www.cosmicpython.com/book/preface.html	Architecture Patterns with Python
-think-python	site	https://allendowney.github.io/ThinkPython/	Think Python, 3rd edition
-dive-into-python3	site	https://diveintopython3.net/	Dive Into Python 3
-learnxinyminutes	site	https://learnxinyminutes.com/python/	Learn Python in Y minutes
+pro-git	site	https://git-scm.com/book/en/v2	Pro Git	The git book, from first commit to internals
+python-cheatsheet	site	https://gto76.github.io/python-cheatsheet/	Comprehensive Python Cheatsheet	The whole language and stdlib on one page
+hitchhikers-guide	site	https://docs.python-guide.org/	The Hitchhiker's Guide to Python	Project layout, idioms and tool choices
+cosmicpython	site	https://www.cosmicpython.com/book/preface.html	Architecture Patterns with Python	Repositories, services and events in Python
+think-python	site	https://allendowney.github.io/ThinkPython/	Think Python, 3rd edition	A from-scratch textbook
+dive-into-python3	site	https://diveintopython3.net/	Dive Into Python 3	Idiomatic Python by example
+learnxinyminutes	site	https://learnxinyminutes.com/python/	Learn Python in Y minutes	The five-minute refresher
 
 # Tools
-uv	site	https://docs.astral.sh/uv/	uv
-ruff	site	https://docs.astral.sh/ruff/	Ruff
-ty	site	https://docs.astral.sh/ty/	ty
-pytest	site	https://docs.pytest.org/en/stable/	pytest
-pytest-cov	site	https://pytest-cov.readthedocs.io/en/latest/	pytest-cov
-pre-commit	site	https://pre-commit.com/	pre-commit
-ipython	site	https://ipython.readthedocs.io/en/stable/	IPython
-copier	site	https://copier.readthedocs.io/en/stable/	Copier
-build	site	https://build.pypa.io/en/stable/	build
-hatchling	site	https://hatch.pypa.io/latest/	Hatch and Hatchling
-mkdocs	site	https://www.mkdocs.org/	MkDocs
-mkdocs-material	site	https://squidfunk.github.io/mkdocs-material/	Material for MkDocs
-mkdocstrings	site	https://mkdocstrings.github.io/	mkdocstrings
-marimo	site	https://docs.marimo.io/	marimo
+uv	site	https://docs.astral.sh/uv/	uv	Python versions, venvs, packages and tools, one binary
+ruff	site	https://docs.astral.sh/ruff/	Ruff	Lint and format, replaces flake8, black and isort
+ty	site	https://docs.astral.sh/ty/	ty	Type checker and language server
+pytest	site	https://docs.pytest.org/en/stable/	pytest	Test runner
+pytest-cov	site	https://pytest-cov.readthedocs.io/en/latest/	pytest-cov	Coverage reports for pytest
+pre-commit	site	https://pre-commit.com/	pre-commit	Git hooks runner
+ipython	site	https://ipython.readthedocs.io/en/stable/	IPython	The better REPL
+copier	site	https://copier.readthedocs.io/en/stable/	Copier	Project templates; what pyark new uses
+build	site	https://build.pypa.io/en/stable/	build	Builds an sdist and a wheel from pyproject
+hatchling	site	https://hatch.pypa.io/latest/	Hatch and Hatchling	Build backend behind pyark new projects
+mkdocs	site	https://www.mkdocs.org/	MkDocs	Static docs sites from Markdown; this site is one
+mkdocs-material	site	https://squidfunk.github.io/mkdocs-material/	Material for MkDocs	The theme this site uses
+mkdocstrings	site	https://mkdocstrings.github.io/	mkdocstrings	API pages from docstrings in mkdocs
+marimo	site	https://docs.marimo.io/	marimo	Reactive notebooks stored as plain .py files
 
 # CLI and terminal
-typer	site	https://typer.tiangolo.com/	Typer	reject=tiangolo.com/[a-z]{2}(-[a-z]+)?/
-click	site	https://click.palletsprojects.com/en/stable/	Click
-rich	site	https://rich.readthedocs.io/en/stable/	Rich
-tqdm	site	https://tqdm.github.io/	tqdm
+typer	site	https://typer.tiangolo.com/	Typer	Typed command-line apps	reject=tiangolo.com/[a-z]{2}(-[a-z]+)?/
+click	site	https://click.palletsprojects.com/en/stable/	Click	The classic CLI framework under typer
+rich	site	https://rich.readthedocs.io/en/stable/	Rich	Colour, tables and progress in the terminal
+tqdm	site	https://tqdm.github.io/	tqdm	Progress bars
 
 # Data
-polars	site	https://docs.pola.rs/	Polars	quota=1g,reject=/api/rust/|/api/python/dev/|/py-polars/
-pandas	zip	https://pandas.pydata.org/pandas-docs/stable/pandas.zip	pandas
-numpy	zip	https://numpy.org/doc/stable/numpy-html.zip	NumPy
-pyarrow	site	https://arrow.apache.org/docs/python/	PyArrow
-duckdb	site	https://duckdb.org/docs/stable/	DuckDB
-openpyxl	site	https://openpyxl.readthedocs.io/en/stable/	openpyxl
-matplotlib	site	https://matplotlib.org/stable/	Matplotlib	quota=1g,reject=/_downloads/
+polars	site	https://docs.pola.rs/	Polars	Fast dataframes with a lazy query engine	quota=1g,reject=/api/rust/|/api/python/dev/|/py-polars/
+pandas	zip	https://pandas.pydata.org/pandas-docs/stable/pandas.zip	pandas	Dataframes, the common denominator
+numpy	zip	https://numpy.org/doc/stable/numpy-html.zip	NumPy	Arrays and numerical computing
+pyarrow	site	https://arrow.apache.org/docs/python/	PyArrow	Columnar storage and Parquet
+duckdb	site	https://duckdb.org/docs/stable/	DuckDB	SQL over files and dataframes, in process
+openpyxl	site	https://openpyxl.readthedocs.io/en/stable/	openpyxl	Read and write Excel files
+matplotlib	site	https://matplotlib.org/stable/	Matplotlib	The standard plotting library	quota=1g,reject=/_downloads/
 
 # Web and HTTP
-httpx	site	https://www.python-httpx.org/	HTTPX
-requests	site	https://requests.readthedocs.io/en/latest/	Requests
-fastapi	site	https://fastapi.tiangolo.com/	FastAPI	reject=tiangolo.com/[a-z]{2}(-[a-z]+)?/
-uvicorn	site	https://uvicorn.dev/	Uvicorn
-starlette	site	https://starlette.dev/	Starlette
-jinja2	site	https://jinja.palletsprojects.com/en/stable/	Jinja
-pydantic	site	https://docs.pydantic.dev/latest/	Pydantic (includes pydantic-settings)
-beautifulsoup4	site	https://www.crummy.com/software/BeautifulSoup/bs4/doc/	Beautiful Soup
-lxml	site	https://lxml.de/	lxml	reject=lxml.de/files/|lxml.de/[0-9]+\.[0-9]+/
+httpx	site	https://www.python-httpx.org/	HTTPX	Sync and async HTTP client
+requests	site	https://requests.readthedocs.io/en/latest/	Requests	The classic HTTP client
+fastapi	site	https://fastapi.tiangolo.com/	FastAPI	Typed web APIs	reject=tiangolo.com/[a-z]{2}(-[a-z]+)?/
+uvicorn	site	https://uvicorn.dev/	Uvicorn	ASGI server for fastapi and starlette
+starlette	site	https://starlette.dev/	Starlette	The ASGI toolkit under fastapi
+jinja2	site	https://jinja.palletsprojects.com/en/stable/	Jinja	Templates
+pydantic	site	https://docs.pydantic.dev/latest/	Pydantic (includes pydantic-settings)	Data validation and settings
+beautifulsoup4	site	https://www.crummy.com/software/BeautifulSoup/bs4/doc/	Beautiful Soup	HTML parsing
+lxml	site	https://lxml.de/	lxml	Fast XML and HTML	reject=lxml.de/files/|lxml.de/[0-9]+\.[0-9]+/
 
 # Databases
-sqlalchemy	site	https://docs.sqlalchemy.org/en/20/	SQLAlchemy 2.0
-alembic	site	https://alembic.sqlalchemy.org/en/latest/	Alembic
-psycopg	site	https://www.psycopg.org/psycopg3/docs/	Psycopg 3
-sqlite-utils	site	https://sqlite-utils.datasette.io/en/stable/	sqlite-utils
+sqlalchemy	site	https://docs.sqlalchemy.org/en/20/	SQLAlchemy 2.0	ORM and SQL toolkit
+alembic	site	https://alembic.sqlalchemy.org/en/latest/	Alembic	Schema migrations for sqlalchemy
+psycopg	site	https://www.psycopg.org/psycopg3/docs/	Psycopg 3	PostgreSQL driver
+sqlite-utils	site	https://sqlite-utils.datasette.io/en/stable/	sqlite-utils	CLI and library for sqlite files
 
 # Config, serialization, time
-pyyaml	site	https://pyyaml.org/wiki/PyYAMLDocumentation	PyYAML
-python-dotenv	site	https://saurabh-kumar.com/python-dotenv/	python-dotenv
-attrs	site	https://www.attrs.org/en/stable/	attrs
-python-dateutil	site	https://dateutil.readthedocs.io/en/stable/	dateutil
+pyyaml	site	https://pyyaml.org/wiki/PyYAMLDocumentation	PyYAML	YAML
+python-dotenv	site	https://saurabh-kumar.com/python-dotenv/	python-dotenv	Load .env files
+attrs	site	https://www.attrs.org/en/stable/	attrs	Classes without boilerplate
+python-dateutil	site	https://dateutil.readthedocs.io/en/stable/	dateutil	Date parsing and arithmetic
 
 # Testing extras
-hypothesis	site	https://hypothesis.readthedocs.io/en/latest/	Hypothesis
-pytest-asyncio	site	https://pytest-asyncio.readthedocs.io/en/latest/	pytest-asyncio
-pytest-xdist	site	https://pytest-xdist.readthedocs.io/en/stable/	pytest-xdist
-faker	site	https://faker.readthedocs.io/en/master/	Faker
+hypothesis	site	https://hypothesis.readthedocs.io/en/latest/	Hypothesis	Property-based testing
+pytest-asyncio	site	https://pytest-asyncio.readthedocs.io/en/latest/	pytest-asyncio	Async tests
+pytest-xdist	site	https://pytest-xdist.readthedocs.io/en/stable/	pytest-xdist	Tests in parallel
+faker	site	https://faker.readthedocs.io/en/master/	Faker	Fake data for tests
 
 # System and files
-watchfiles	site	https://watchfiles.helpmanual.io/	watchfiles
-psutil	site	https://psutil.readthedocs.io/en/latest/	psutil
-platformdirs	site	https://platformdirs.readthedocs.io/en/latest/	platformdirs
+watchfiles	site	https://watchfiles.helpmanual.io/	watchfiles	File watching
+psutil	site	https://psutil.readthedocs.io/en/latest/	psutil	Process and system information
+platformdirs	site	https://platformdirs.readthedocs.io/en/latest/	platformdirs	The right config, cache and data directories
 
-# No docs site beyond the README (served from the wheel's metadata via pydoc): tomli-w, orjson,
-# freezegun, anthropic (its docs site is the whole Claude platform; too large to mirror).

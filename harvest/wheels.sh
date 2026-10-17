@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# Fill store/wheels with every package in manifest/packages.txt and manifest/tools.txt plus its dependency
-# closure, once per Python version in manifest/python.txt (wheels differ per version;
-# identical files are skipped). uv has no download-only command (checked in its CLI
+# Fill store/wheels with every package in manifest/packages.txt and manifest/tools.txt plus its
+# dependency closure, for the one Python version in manifest/python.txt. uv has no download-only command (checked in its CLI
 # reference 2026-10-17), so a throwaway venv runs `pip download`. Offline, uv consumes
 # the directory via find-links + no-index (install/python.sh writes that config).
 source "$(dirname "$0")/../lib/common.sh"
@@ -14,7 +13,7 @@ export UV_PYTHON_INSTALL_MIRROR="file://$PYARK_STORE/python"
 req=$(mktemp); trap 'rm -f "$req"' EXIT
 { command cat "$PYARK_ROOT/manifest/packages.txt"; echo; echo "# from manifest/tools.txt"
   manifest tools | tr ' ' '\n' | grep -v '^--' ; } > "$req"
-for ver in $(manifest python); do
+for ver in $(python_version); do
   tmp=$(mktemp -d); trap 'rm -rf "$tmp" "$req"' EXIT
   log "wheels: python $ver — creating helper venv"
   UV_NO_CONFIG=1 "$UV" venv -q --python "$ver" "$tmp/venv"

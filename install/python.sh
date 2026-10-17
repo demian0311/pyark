@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Point uv at the store and install the Python versions and CLI tools from it. No network.
 #  - ~/.config/uv/uv.toml: no-index + find-links=store/wheels + python-install-mirror=store/python
-#  - uv python install <manifest/python.txt>   (from the mirror, into uv's managed dir)
+#  - uv python install <manifest/python.txt>   (the one version, from the mirror)
 #  - uv tool install <manifest/tools.txt>      (from the wheelhouse, into ~/.local/bin)
 # uv itself is expected on PATH from the pacman package (install/arch.sh); until then the
 # copy extracted into store/bin is linked to ~/.local/bin/uv.
@@ -25,14 +25,14 @@ if ! command -v uv >/dev/null; then
   mkdir -p "$HOME/.local/bin" && ln -sf "$UV" "$HOME/.local/bin/uv" && log "python: linked ~/.local/bin/uv -> store/bin/uv (until the pacman package is installed)"
 fi
 
-mapfile -t vers < <(manifest python)
-log "python: installing ${vers[*]} from the mirror"
-"$UV" python install "${vers[@]}"
+ver=$(python_version)
+log "python: installing $ver from the mirror"
+"$UV" python install "$ver"
 
 while read -r line; do
   log "python: uv tool install $line"
   # shellcheck disable=SC2086
-  "$UV" tool install -q --python "${vers[0]}" $line
+  "$UV" tool install -q --python "$ver" $line
 done < <(manifest tools)
 
 log "python: $("$UV" python list --only-installed 2>/dev/null | grep -c cpython) pythons visible to uv, tools: $("$UV" tool list 2>/dev/null | grep -vE '^-' | awk '{print $1}' | paste -sd' ')"

@@ -6,7 +6,7 @@ source "$(dirname "$0")/../lib/common.sh"
 need copier uv git
 name=$1; shift
 [ -d "$name" ] && die "new: ./$name already exists"
-pyver=$(manifest python | head -1)
+pyver=$(python_version)
 
 copier copy --quiet --defaults -d "project_name=$name" -d "python_version=$pyver" "$@" \
   "$PYARK_ROOT/templates/project" "./$name"

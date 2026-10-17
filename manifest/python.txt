@@ -1,4 +1,4 @@
-# Python versions harvest/python.sh mirrors (python-build-standalone tarballs via uv).
-# First line is the default for `pyark new`.
+# The one Python version pyark supports. pyark is opinionated: one interpreter, every
+# project on it. Change it here, then: pyark harvest python && pyark harvest wheels &&
+# pyark harvest docs && pyark install python.
 3.14
-3.13
