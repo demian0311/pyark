@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Mirror every entry in manifest/docs.txt into store/docs/<id>/. See the manifest header for
 # the kinds. Incremental: an id whose directory already has a HARVESTED stamp is skipped unless
-# PYARK_REFRESH=1. Each entry writes <id>/ENTRY with the relative path of its landing page.
+# PYARK_REFRESH=1. PYARK_DOCS_ONLY=<id> harvests one entry. Each entry writes <id>/ENTRY with
+# the relative path of its landing page.
 source "$(dirname "$0")/../lib/common.sh"
 need wget curl bsdtar
 root=$(store_dir docs)
@@ -65,6 +66,7 @@ harvest_one() { # harvest_one <id> <kind> <source>
 }
 
 while IFS=$'\t' read -r id kind src title; do
+  [ -z "${PYARK_DOCS_ONLY:-}" ] || [ "$id" = "$PYARK_DOCS_ONLY" ] || continue
   if [[ "$src" == *"{ver}"* ]]; then
     for v in "${vers[@]}"; do harvest_one "$id-$v" "$kind" "${src//\{ver\}/$v}"; done
   else

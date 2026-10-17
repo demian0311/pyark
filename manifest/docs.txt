@@ -9,12 +9,14 @@
 # (checked 2026-10-17: only pytest, pytest-cov, build, rich still did), and building each
 # project's docs needs that project's doc toolchain. A mirror of the published site is uniform.
 # Library ids match names in manifest/packages.txt so `pyark doctor` can report gaps.
-# Every URL below returned 200 on 2026-10-17.
+# Every URL below returned 200 on 2026-10-17. The sqlite zip is versioned: find the current one
+# on https://sqlite.org/download.html under "Documentation" when refreshing.
 
 # Core reference
 python	zip	https://docs.python.org/{ver}/archives/python-{ver}-docs-html.zip	Python {ver} documentation
 packaging-guide	site	https://packaging.python.org/en/latest/	Python Packaging User Guide
 arch-wiki	pacman	arch-wiki-docs:usr/share/doc/arch-wiki/html	Arch Wiki
+sqlite	zip	https://sqlite.org/2026/sqlite-doc-3540100.zip	SQLite (the database; Python's sqlite3 module is in the Python docs)
 
 # Guides and books
 pro-git	site	https://git-scm.com/book/en/v2	Pro Git
