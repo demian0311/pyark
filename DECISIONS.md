@@ -51,3 +51,4 @@ Dated. Append, never rewrite. Agent-facing.
 - 61 entries, 3.2 GB before scoping. Three mirrors hit the 500m cap for the wrong content: lxml.de/files (431 MB of release tarballs), Polars' Rust API and dev docs, FastAPI/Typer translations. `manifest/docs.txt` grew a 5th column `quota=,reject=` per entry; the global reject list now covers tgz/bz2/xz/egg/exe/msi/dmg.
 - Never edit `harvest/docs.sh` while a harvest runs: bash reads the script incrementally; the running copy died with a syntax error at the last entry (platformdirs completed, summary never printed).
 - `PYARK_DOCS_ONLY="a b"` re-mirrors chosen entries; delete the entry's directory first when the scoping changed, wget --mirror never removes files.
+- Re-mirror results 2026-10-17: FastAPI 363→40 MB (translations), lxml 507→13 MB (release files AND per-version doc copies `lxml.de/N.N/`), Polars 394 MB and Matplotlib 430 MB complete under a 1g cap. Store total ≈3.2 GB, docs ≈2.3 GB.
