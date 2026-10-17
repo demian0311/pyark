@@ -1,0 +1,77 @@
+# pyark manifest/packages.txt — curated 2026-10-17 (defaults accepted)
+# One package per line. Comments and blanks ignored. harvest/wheels.sh fetches
+# each with its dependency closure for the Python versions in manifest/python.txt.
+
+# Tools (installed with uv tool, not per project)
+ruff
+ty
+pytest
+pytest-cov
+pre-commit
+ipython
+copier
+build
+
+# CLI and terminal
+typer
+click
+rich
+tqdm
+
+# Data
+polars
+pandas
+numpy
+pyarrow
+duckdb
+openpyxl
+
+# Plotting
+matplotlib
+
+# Web and HTTP
+httpx
+requests
+fastapi
+uvicorn
+starlette
+jinja2
+pydantic
+pydantic-settings
+beautifulsoup4
+lxml
+
+# Databases
+sqlalchemy
+alembic
+psycopg
+sqlite-utils
+
+# Config, serialization, time
+pyyaml
+tomli-w
+orjson
+python-dotenv
+attrs
+python-dateutil
+
+# Testing extras
+hypothesis
+pytest-asyncio
+pytest-xdist
+faker
+freezegun
+
+# System and files
+watchfiles
+psutil
+platformdirs
+
+# Docs and packaging
+mkdocs
+mkdocs-material
+mkdocstrings
+hatchling
+
+# Notebooks
+marimo

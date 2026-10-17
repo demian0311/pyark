@@ -1,0 +1,4 @@
+# Python versions harvest/python.sh mirrors (python-build-standalone tarballs via uv).
+# First line is the default for `pyark new`.
+3.14
+3.13
