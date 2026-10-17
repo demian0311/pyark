@@ -20,7 +20,7 @@ arch-wiki	pacman	arch-wiki-docs:usr/share/doc/arch-wiki/html	Arch Wiki
 pro-git	site	https://git-scm.com/book/en/v2	Pro Git
 python-cheatsheet	site	https://gto76.github.io/python-cheatsheet/	Comprehensive Python Cheatsheet
 hitchhikers-guide	site	https://docs.python-guide.org/	The Hitchhiker's Guide to Python
-cosmicpython	site	https://www.cosmicpython.com/book/	Architecture Patterns with Python
+cosmicpython	site	https://www.cosmicpython.com/book/preface.html	Architecture Patterns with Python
 think-python	site	https://allendowney.github.io/ThinkPython/	Think Python, 3rd edition
 dive-into-python3	site	https://diveintopython3.net/	Dive Into Python 3
 learnxinyminutes	site	https://learnxinyminutes.com/python/	Learn Python in Y minutes
