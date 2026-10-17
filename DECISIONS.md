@@ -4,7 +4,7 @@ Dated. Append, never rewrite. Agent-facing.
 
 ## 2026-10-17 — shape (mockup: mockups/2026-10-17-shape.html, https://claude.ai/artifact/S3idvHgCseAuUEcEF1rzF5)
 
-- Name `pyark`, repo `demian0311/pyark` (GitHub push pending). Public: no machine state, no secrets.
+- Name `pyark`, repo https://github.com/demian0311/pyark (public, created and pushed 2026-10-17). Public: no machine state, no secrets.
 - Architecture: `harvest` (online) fills `store/`; `install` (offline) consumes it. `store/` gitignored, default `~/.local/share/pyark`, may be a USB mount.
 - Target: this laptop, sometimes offline. Omarchy's own packages out of scope. Revisit if a second air-gapped machine appears.
 - Python toolchain: uv. Versions in `manifest/python.txt`, first line default. mise stays for non-Python tools only.
