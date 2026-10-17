@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Mirror every entry in manifest/docs.txt into store/docs/<id>/. See the manifest header for
 # the kinds. Incremental: an id whose directory already has a HARVESTED stamp is skipped unless
-# PYARK_REFRESH=1. PYARK_DOCS_ONLY=<id> harvests one entry. Each entry writes <id>/ENTRY with
+# PYARK_REFRESH=1. PYARK_DOCS_ONLY="<id> <id>" harvests only those entries. Never edit this
+# file while a harvest runs: bash reads it incrementally and the running copy breaks. Each entry writes <id>/ENTRY with
 # the relative path of its landing page.
 source "$(dirname "$0")/../lib/common.sh"
 need wget curl bsdtar
 root=$(store_dir docs)
-quota="${PYARK_DOCS_QUOTA:-500m}"
 mapfile -t vers < <(manifest python)
 failed=()
 
@@ -30,7 +30,7 @@ do_zip() { # do_zip <dir> <url>
   printf 'index.html' > "$1/ENTRY"
 }
 
-do_site() { # do_site <dir> <url>
+do_site() { # do_site <dir> <url>   (reads $reject and $quota, set per entry from the manifest's 5th column)
   mkdir -p "$1"
   local host; host=${2#*://}; host=${host%%/*}
   # --no-parent keeps the crawl below the URL's path; --domains pins it to the site's host even
@@ -39,7 +39,7 @@ do_site() { # do_site <dir> <url>
   # relative so the tree serves under any prefix.
   wget --quiet --mirror --no-parent --domains="$host" --no-host-directories --page-requisites --adjust-extension \
        --convert-links --quota="$quota" --wait=0 -e robots=off --user-agent="pyark-harvest (wget)" \
-       --reject-regex='(\?|/_sources/|\.(pdf|zip|whl|tar\.gz|mp4|webm))' \
+       --reject-regex="(\?|/_sources/|\.(pdf|zip|whl|tar\.gz|tgz|tar\.bz2|bz2|xz|egg|exe|msi|dmg|mp4|webm)\$${reject:+|$reject})" \
        --directory-prefix="$1" "$2" || [ $? -eq 8 ]   # 8 = some pages 404'd; not fatal
   [ -n "$(find "$1" -name '*.html' -print -quit)" ] || return 1
   landing "$2" > "$1/ENTRY"
@@ -54,8 +54,11 @@ do_pacman() { # do_pacman <dir> <package:path/inside/pkg>
   printf 'en/Main_page.html' > "$1/ENTRY"
 }
 
-harvest_one() { # harvest_one <id> <kind> <source>
-  local dir="$root/$1"
+harvest_one() { # harvest_one <id> <kind> <source> [opts]   opts: quota=1g,reject=<ERE>  (comma-separated)
+  local dir="$root/$1" opt
+  quota="${PYARK_DOCS_QUOTA:-500m}"; reject=""
+  IFS=, read -ra _opts <<<"${4:-}"
+  for opt in "${_opts[@]}"; do case "$opt" in quota=*) quota=${opt#quota=};; reject=*) reject=${opt#reject=};; esac; done
   if [ -f "$dir/HARVESTED" ] && [ -z "${PYARK_REFRESH:-}" ]; then log "docs: have $1"; return; fi
   log "docs: $1 ($2)"
   if "do_$2" "$dir" "$3"; then
@@ -65,12 +68,12 @@ harvest_one() { # harvest_one <id> <kind> <source>
   fi
 }
 
-while IFS=$'\t' read -r id kind src title; do
-  [ -z "${PYARK_DOCS_ONLY:-}" ] || [ "$id" = "$PYARK_DOCS_ONLY" ] || continue
+while IFS=$'\t' read -r id kind src title opts; do
+  if [ -n "${PYARK_DOCS_ONLY:-}" ]; then case " $PYARK_DOCS_ONLY " in *" $id "*) ;; *) continue;; esac; fi
   if [[ "$src" == *"{ver}"* ]]; then
-    for v in "${vers[@]}"; do harvest_one "$id-$v" "$kind" "${src//\{ver\}/$v}"; done
+    for v in "${vers[@]}"; do harvest_one "$id-$v" "$kind" "${src//\{ver\}/$v}" "$opts"; done
   else
-    harvest_one "$id" "$kind" "$src"
+    harvest_one "$id" "$kind" "$src" "$opts"
   fi
 done < <(manifest docs)
 

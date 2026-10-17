@@ -1,5 +1,7 @@
 # pyark manifest/docs.txt — documentation harvest/docs.sh mirrors into store/docs/<id>/.
-# Format: id <TAB> kind <TAB> source <TAB> title
+# Format: id <TAB> kind <TAB> source <TAB> title [<TAB> opts]
+# opts (site kind only), comma-separated: quota=1g (per-site cap) and reject=<ERE> (extra URL
+# pattern to skip, e.g. other languages or a Rust API). Found by looking at what filled a mirror.
 # kinds:  zip     download a zip of built HTML and unpack it (strips the top-level dir).
 #                 {ver} expands once per version in manifest/python.txt (id gets -<ver>).
 #         site    wget --mirror of a published docs site, scoped below the URL's path.
@@ -44,30 +46,30 @@ mkdocstrings	site	https://mkdocstrings.github.io/	mkdocstrings
 marimo	site	https://docs.marimo.io/	marimo
 
 # CLI and terminal
-typer	site	https://typer.tiangolo.com/	Typer
+typer	site	https://typer.tiangolo.com/	Typer	reject=tiangolo.com/[a-z]{2}(-[a-z]+)?/
 click	site	https://click.palletsprojects.com/en/stable/	Click
 rich	site	https://rich.readthedocs.io/en/stable/	Rich
 tqdm	site	https://tqdm.github.io/	tqdm
 
 # Data
-polars	site	https://docs.pola.rs/	Polars
+polars	site	https://docs.pola.rs/	Polars	quota=1g,reject=/api/rust/|/api/python/dev/|/py-polars/
 pandas	zip	https://pandas.pydata.org/pandas-docs/stable/pandas.zip	pandas
 numpy	zip	https://numpy.org/doc/stable/numpy-html.zip	NumPy
 pyarrow	site	https://arrow.apache.org/docs/python/	PyArrow
 duckdb	site	https://duckdb.org/docs/stable/	DuckDB
 openpyxl	site	https://openpyxl.readthedocs.io/en/stable/	openpyxl
-matplotlib	site	https://matplotlib.org/stable/	Matplotlib
+matplotlib	site	https://matplotlib.org/stable/	Matplotlib	quota=1g,reject=/_downloads/
 
 # Web and HTTP
 httpx	site	https://www.python-httpx.org/	HTTPX
 requests	site	https://requests.readthedocs.io/en/latest/	Requests
-fastapi	site	https://fastapi.tiangolo.com/	FastAPI
+fastapi	site	https://fastapi.tiangolo.com/	FastAPI	reject=tiangolo.com/[a-z]{2}(-[a-z]+)?/
 uvicorn	site	https://uvicorn.dev/	Uvicorn
 starlette	site	https://starlette.dev/	Starlette
 jinja2	site	https://jinja.palletsprojects.com/en/stable/	Jinja
 pydantic	site	https://docs.pydantic.dev/latest/	Pydantic (includes pydantic-settings)
 beautifulsoup4	site	https://www.crummy.com/software/BeautifulSoup/bs4/doc/	Beautiful Soup
-lxml	site	https://lxml.de/	lxml
+lxml	site	https://lxml.de/	lxml	reject=lxml.de/files/
 
 # Databases
 sqlalchemy	site	https://docs.sqlalchemy.org/en/20/	SQLAlchemy 2.0

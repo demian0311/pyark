@@ -45,3 +45,9 @@ Dated. Append, never rewrite. Agent-facing.
 - `templates/project` is a copier template (copier from the wheelhouse). `install/new.sh` answers `project_name` and `python_version` (first line of `manifest/python.txt`), passes extra `-d` through, runs `uv sync`, `git init`, first commit. Hatchling backend; editable installs need `editables`, which was missing from the wheelhouse until this (found by the first offline test).
 - Typer with one command is the root command: `cli-app --name x`, not `cli-app hello`.
 - Docs crawl now carries `--domains=<host>`: without it wget followed affiliate redirects on docs.python-guide.org into amazon.com (386 MB before it was killed). The polluted mirror was deleted and the harvest restarted; done entries are skipped by their stamps.
+
+## 2026-10-17 — first full docs harvest, what it taught
+
+- 61 entries, 3.2 GB before scoping. Three mirrors hit the 500m cap for the wrong content: lxml.de/files (431 MB of release tarballs), Polars' Rust API and dev docs, FastAPI/Typer translations. `manifest/docs.txt` grew a 5th column `quota=,reject=` per entry; the global reject list now covers tgz/bz2/xz/egg/exe/msi/dmg.
+- Never edit `harvest/docs.sh` while a harvest runs: bash reads the script incrementally; the running copy died with a syntax error at the last entry (platformdirs completed, summary never printed).
+- `PYARK_DOCS_ONLY="a b"` re-mirrors chosen entries; delete the entry's directory first when the scoping changed, wget --mirror never removes files.
