@@ -15,3 +15,11 @@ Dated. Append, never rewrite. Agent-facing.
 - nvim: layer onto Demian's existing LazyVim (`~/.config/nvim`): python extra, plugin dir pointed at store, Mason disabled. Not `NVIM_APPNAME`, not a replacement.
 - Scaffolding: copier template in `templates/`, `pyark new <name>`.
 - Entry point `bin/pyark`: harvest · install · serve · new · doctor.
+
+## 2026-10-17 — docs beyond library reference
+
+- `manifest/docs.txt` holds non-library docs: Python HTML zip per version, Packaging Guide, Pro Git, gto76 cheatsheet, Hitchhiker's Guide, cosmicpython, Think Python, Dive Into Python 3, Learn X in Y (python), arch-wiki-docs, and the docs of uv/ruff/pytest/mkdocs/marimo.
+- Rejected by Demian: PEPs, Python Module of the Week, Exercism track. Rejected by size: Stack Overflow dump, Wikipedia.
+- Harvested texts stay in `store/`, never in the repo; several are CC BY-NC, fine for local use, not for redistribution.
+- Site front page links `python -m pydoc -p <port>` (docstrings of everything installed) as a second search, zero harvest cost.
+- Local coding model: out of scope for pyark; possible separate add-on.

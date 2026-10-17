@@ -1,0 +1,30 @@
+# pyark manifest/docs.txt — curated 2026-10-17. Sources verified reachable 2026-10-17.
+# Format: id <TAB> kind <TAB> source <TAB> note
+# kind: html-zip (download and unzip) · sphinx | mkdocs | asciidoc (clone, build to HTML)
+#       html-repo (clone, serve as-is) · pacman (install package, symlink its HTML) · notebooks (clone, convert)
+# Library docs are NOT listed here: harvest/docs.sh derives them from manifest/packages.txt
+# (readthedocs htmlzip where published, else the project's docs/ tree).
+# License and exact build command are read from each source at harvest time, never recorded here.
+
+# Core reference
+python	html-zip	https://docs.python.org/{ver}/archives/python-{ver}-docs-html.zip	one per version in manifest/python.txt
+packaging-guide	sphinx	https://github.com/pypa/packaging.python.org	pyproject, wheels, publishing
+
+# Guides and books
+pro-git	asciidoc	https://github.com/progit/progit2	git reference
+python-cheatsheet	html-repo	https://github.com/gto76/python-cheatsheet	one-page language and stdlib summary
+hitchhikers-guide	sphinx	https://github.com/realpython/python-guide	project layout, idioms
+cosmicpython	asciidoc	https://github.com/cosmicpython/book	architecture patterns in Python
+think-python	notebooks	https://github.com/AllenDowney/ThinkPython	from-scratch textbook, 3rd ed
+dive-into-python3	html-repo	https://github.com/diveintomark/diveintopython3	idiomatic Python by example
+learnxinyminutes-python	html-repo	https://github.com/adambard/learnxinyminutes-docs	python.md only, render with mkdocs
+
+# System
+arch-wiki	pacman	arch-wiki-docs	Omarchy is Arch; HTML under /usr/share/doc/arch-wiki/html
+
+# Tool docs (tools are in manifest/packages.txt as uv tools or are binaries)
+uv	mkdocs	https://github.com/astral-sh/uv	docs/
+ruff	mkdocs	https://github.com/astral-sh/ruff	docs/
+pytest	sphinx	https://github.com/pytest-dev/pytest	doc/en/
+mkdocs	mkdocs	https://github.com/mkdocs/mkdocs	docs/
+marimo	mkdocs	https://github.com/marimo-team/marimo	docs/
