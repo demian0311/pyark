@@ -11,7 +11,7 @@ gen="$src/docs/reference.md"
 ver=$(python_version)
 # Group heading in manifest/docs.txt → Material icon. A group missing here gets the default.
 declare -A group_icon=(
-  ["Core reference"]=star-four-points ["Guides and books"]=book-open-variant ["Tools"]=tools
+  ["Core reference"]=star-four-points ["Guides and books"]=book-open-variant ["Tools"]=tools ["Editor"]=file-code-outline
   ["CLI and terminal"]=console ["Data"]=chart-box ["Web and HTTP"]=web ["Databases"]=database
   ["Config, serialization, time"]=cog-outline ["Testing extras"]=test-tube ["System and files"]=folder-cog
 )

@@ -49,6 +49,10 @@ mkdocs-material	site	https://squidfunk.github.io/mkdocs-material/	Material for M
 mkdocstrings	site	https://mkdocstrings.github.io/	mkdocstrings	API pages from docstrings in mkdocs
 marimo	site	https://docs.marimo.io/	marimo	Reactive notebooks stored as plain .py files
 
+# Editor
+neovim	site	https://neovim.io/doc/user/	Neovim	The editor's own manual: modes, motions, options, Lua API, LSP
+lazyvim	site	https://www.lazyvim.org/	LazyVim	The nvim setup Omarchy ships: keymaps, plugins and language extras
+
 # CLI and terminal
 typer	site	https://typer.tiangolo.com/	Typer	Typed command-line apps	reject=tiangolo.com/[a-z]{2}(-[a-z]+)?/
 click	site	https://click.palletsprojects.com/en/stable/	Click	The classic CLI framework under typer
