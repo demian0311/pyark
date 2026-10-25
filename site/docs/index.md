@@ -9,19 +9,19 @@ icon: material/home-outline
 This machine has a complete Python development environment that works with the network down. Interpreter, packages, tools and every page on this site come from a local **store** filled while online.
 
 <div class="cards" markdown>
-<div class="card" markdown>
+<div class="card" style="--hue: var(--slate-blue)" markdown>
 <h3 markdown>:material-package-variant-closed: uv never leaves the disk</h3>
 <p><code>uv add polars</code> resolves from the local wheelhouse in well under a second. A package that is not in the store fails at once. <a href="add-a-library/">Add a library or tool</a> says what to do.</p>
 </div>
-<div class="card" markdown>
+<div class="card" style="--hue: var(--slate-teal)" markdown>
 <h3 markdown>:material-language-python: One Python</h3>
 <p>pyark pins a single interpreter and every project runs on it. No version matrix, no second set of wheels or docs.</p>
 </div>
-<div class="card" markdown>
+<div class="card" style="--hue: var(--slate-orange)" markdown>
 <h3 markdown>:material-bookshelf: The docs are here</h3>
 <p>Every library in the store, the Python docs, SQLite, the Arch Wiki and a shelf of free books, under <a href="reference/">Reference docs</a>.</p>
 </div>
-<div class="card" markdown>
+<div class="card" style="--hue: var(--slate-purple)" markdown>
 <h3 markdown>:material-file-code-outline: The editor is ready</h3>
 <p>nvim with ruff and ty as language servers, nothing downloaded at runtime. <a href="nvim/">Editor (nvim)</a>.</p>
 </div>

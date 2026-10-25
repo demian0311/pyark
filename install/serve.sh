@@ -14,4 +14,13 @@ if [ "${PYARK_NO_OPEN:-0}" != 1 ] && [ -n "${WAYLAND_DISPLAY:-}${DISPLAY:-}" ] &
       curl -fsS -o /dev/null "$url" 2>/dev/null && exec xdg-open "$url" >/dev/null 2>&1
     done ) &
 fi
-exec python3 -m http.server "$PYARK_SITE_PORT" --bind 127.0.0.1 --directory "$out"
+# no-cache: the browser revalidates every file, so a rebuilt slate.css shows on the next reload
+# instead of a cached copy styling new markup (seen 2026-10-24).
+exec python3 -c '
+import functools, http.server, sys
+class H(http.server.SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-cache")
+        super().end_headers()
+http.server.ThreadingHTTPServer(("127.0.0.1", int(sys.argv[1])), functools.partial(H, directory=sys.argv[2])).serve_forever()
+' "$PYARK_SITE_PORT" "$out"
