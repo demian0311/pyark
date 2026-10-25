@@ -56,6 +56,10 @@ close_group
   echo
   command cat "$body"
 } > "$gen"
+# The home page shows the same tiles, linking into the reference page.
+sed 's|href="#|href="reference/#|' "$jump" | { echo '<nav class="ref-tiles" markdown>'; command cat; echo '</nav>'; } > "$jump.home"
+sed -i -e "/<!-- ref-tiles:/r $jump.home" -e "/<!-- ref-tiles:/d" "$src/docs/index.md"
+rm -f "$jump.home"
 
 mkdocs build -q -f "$src/mkdocs.yml" -d "$out"
 # Cache-bust our own assets: a browser that cached an older slate.css keeps using it on a plain

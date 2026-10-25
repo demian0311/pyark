@@ -6,6 +6,30 @@ icon: material/home-outline
 
 <p class="lede">Offline Python for Omarchy.</p>
 
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+<div id="search" class="home-search"></div>
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+(function () {
+  // One search over every mirrored doc under /ref/. ?find=<query> deep-links a search.
+  function start() {
+    if (typeof PagefindUI === "undefined") return;
+    var ui = new PagefindUI({ element: "#search", baseUrl: "/ref/", showSubResults: true, showImages: false, pageSize: 10,
+                     translations: { placeholder: "Search every manual, book and library doc" } });
+    // triggerSearch waits for the index; a synthetic input event fired before it loaded was dropped.
+    var q = new URLSearchParams(location.search).get("find");
+    if (q) ui.triggerSearch(q);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
+</script>
+
+## :material-bookshelf: Reference docs
+
+<!-- ref-tiles: install/site.sh puts the group tiles here -->
+
+## :material-information-outline: About this machine
+
 This machine has a complete Python development environment that works with the network down. Interpreter, packages, tools and every page on this site come from a local **store** filled while online.
 
 <div class="cards" markdown>
@@ -40,7 +64,7 @@ This machine has a complete Python development environment that works with the n
 
 ## :material-compass-outline: Living without a search engine
 
-- Anything in the docs: [Search all docs](find/) is one box over every mirrored page.
+- Anything in the docs: the search box at the top of this page covers every mirrored page.
 - Library API: open the library under Reference docs and use its own search.
 - Anything installed in a project: `uv run python -m pydoc -b` inside the project opens a browser on the docstrings of every module it can import.
 - Standard library: the Python docs have the full module index.

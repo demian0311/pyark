@@ -23,13 +23,12 @@ extra_css: [assets/slate.css]
 extra_javascript: [assets/ref-filter.js]
 nav:
   - Home: index.md
+  - Reference docs: reference.md
   - Start a project: start-a-project.md
   - Add a library or tool: add-a-library.md
   - Working offline: offline.md
   - Tools: tools.md
   - Editor (nvim): nvim.md
-  - Reference docs: reference.md
-  - Search all docs: find.md
 plugins: [search]
 markdown_extensions:
   - admonition

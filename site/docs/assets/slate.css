@@ -111,3 +111,8 @@
 .ref-card.missing { border-left-color: var(--slate-red); border-style: dashed; border-left-style: solid; }
 .ref-card.missing .meta { color: var(--slate-red); }
 .ref-tile[hidden], .ref-group[hidden], .ref-card[hidden] { display: none !important; }
+
+/* Home: the all-docs search (Pagefind UI) in the site's tokens */
+.home-search { margin: 1.2rem 0 2rem; --pagefind-ui-scale: .82; --pagefind-ui-primary: var(--slate-primary); --pagefind-ui-text: var(--slate-text);
+  --pagefind-ui-background: var(--slate-surface); --pagefind-ui-border: var(--slate-border); --pagefind-ui-tag: var(--slate-overlay);
+  --pagefind-ui-border-width: 1px; --pagefind-ui-border-radius: 8px; --pagefind-ui-font: inherit; }
