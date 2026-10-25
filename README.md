@@ -35,7 +35,7 @@ pyark harvest            # arch + python + wheels (+ nvim + docs once they exist
 pyark install arch       # asks for your password: pacman -U of the stored packages
 pyark install python     # writes ~/.config/uv/uv.toml, installs Pythons and tools
 pyark install nvim       # adds the Python layer to LazyVim, restores plugins from the store
-pyark install site       # builds the docs site; `pyark serve` opens it on localhost:8800
+pyark install site       # builds the docs site; `pyark serve` serves it on localhost:8800 and opens the browser (PYARK_NO_OPEN=1 skips)
 pyark doctor             # every line should be a green tick
 ```
 
