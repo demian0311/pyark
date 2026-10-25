@@ -8,6 +8,7 @@ icon: material/home-outline
 
 <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
 <div id="search" class="home-search"></div>
+<script src="assets/ref-titles.js"></script>
 <script src="/pagefind/pagefind-ui.js"></script>
 <script>
 (function () {
@@ -15,7 +16,14 @@ icon: material/home-outline
   function start() {
     if (typeof PagefindUI === "undefined") return;
     var ui = new PagefindUI({ element: "#search", baseUrl: "/ref/", showSubResults: true, showImages: false, pageSize: 10,
-                     translations: { placeholder: "Search every manual, book and library doc" } });
+                     translations: { placeholder: "Search every manual, book and library doc" },
+                     // Name the source: /ref/<id>/... -> "Title (Library)".
+                     processResult: function (r) {
+                       var id = (r.url.match(/\/ref\/([^/]+)\//) || [])[1];
+                       var lib = id && (window.PYARK_REF_TITLES || {})[id];
+                       if (lib && r.meta && r.meta.title && r.meta.title.indexOf(lib) === -1) r.meta.title += " (" + lib + ")";
+                       return r;
+                     } });
     // triggerSearch waits for the index; a synthetic input event fired before it loaded was dropped.
     var q = new URLSearchParams(location.search).get("find");
     if (q) ui.triggerSearch(q);

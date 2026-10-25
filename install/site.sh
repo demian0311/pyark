@@ -61,11 +61,15 @@ sed 's|href="#|href="reference/#|' "$jump" | { echo '<nav class="ref-tiles" mark
 sed -i -e "/<!-- ref-tiles:/r $jump.home" -e "/<!-- ref-tiles:/d" "$src/docs/index.md"
 rm -f "$jump.home"
 
+# id -> title for every docs entry, so a home-page search result can name the library it came from.
+{ printf 'window.PYARK_REF_TITLES = {'
+  manifest docs | awk -F'\t' -v ver="$ver" '{ t=$4; gsub(/\{ver\}/, ver, t); gsub(/"/, "\\\"", t); printf "%s\"%s\": \"%s\"", (n++ ? ", " : ""), $1, t }'
+  echo '};'; } > "$src/docs/assets/ref-titles.js"
 mkdocs build -q -f "$src/mkdocs.yml" -d "$out"
 # Cache-bust our own assets: a browser that cached an older slate.css keeps using it on a plain
 # reload even with no-cache on later responses (seen 2026-10-24). A content hash in the URL
 # makes every rebuild a new address.
-for a in slate.css ref-filter.js; do
+for a in slate.css ref-filter.js ref-titles.js; do
   v=$(md5sum "$out/assets/$a" | cut -c1-8)
   find "$out" -path "$out/ref" -prune -o -name '*.html' -print0 | xargs -0 sed -i "s|assets/$a\"|assets/$a?v=$v\"|g"
 done
@@ -83,7 +87,7 @@ if [ -f "$docs/HARVESTED" ]; then
     log "site: indexing store/docs for search (a few minutes)"
     rm -rf "$idx"
     UV_OFFLINE=1 "$UV" run -q --no-project --with 'pagefind[bin]' python -m pagefind --site "$docs" --output-path "$idx" --force-language en \
-      --exclude-selectors "nav,header,footer,aside,.sidebar,.toctree-wrapper,.md-sidebar,.sphinxsidebar,.bd-sidebar,.md-header,.md-footer" 2>&1 \
+      --exclude-selectors ".headerlink,div.related,a.anchor,.hash-link,nav,header,footer,aside,.sidebar,.toctree-wrapper,.md-sidebar,.sphinxsidebar,.bd-sidebar,.md-header,.md-footer" 2>&1 \
       | grep -E 'Indexed [0-9]+ pages|Finished' | sed 's/^/  /' >&2
   fi
   ln -sfn "$idx" "$out/pagefind"

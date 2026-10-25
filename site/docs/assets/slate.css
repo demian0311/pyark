@@ -116,3 +116,16 @@
 .home-search { margin: 1.2rem 0 2rem; --pagefind-ui-scale: .82; --pagefind-ui-primary: var(--slate-primary); --pagefind-ui-text: var(--slate-text);
   --pagefind-ui-background: var(--slate-surface); --pagefind-ui-border: var(--slate-border); --pagefind-ui-tag: var(--slate-overlay);
   --pagefind-ui-border-width: 1px; --pagefind-ui-border-radius: 8px; --pagefind-ui-font: inherit; }
+/* The filter panel comes from data-pagefind-filter in one mirrored site, and Material styles its
+   <details> as admonitions; hide it so results take the full width. Matches use the accent. */
+.home-search .pagefind-ui .pagefind-ui__filter-panel { display: none !important; }
+.home-search .pagefind-ui .pagefind-ui__results-area { margin-top: 0 !important; min-width: 0 !important; }
+.home-search .pagefind-ui mark { background: color-mix(in srgb, var(--slate-primary) 22%, transparent); color: inherit !important; border-radius: 2px; padding: 0 1px; }
+.home-search .pagefind-ui mark { background-color: color-mix(in srgb, var(--slate-primary) 22%, transparent) !important; }
+.home-search .pagefind-ui__result-title, .home-search .pagefind-ui__result-link { color: var(--slate-text); }
+.home-search .pagefind-ui__result-link:hover { color: var(--slate-primary); }
+.home-search .pagefind-ui__result-excerpt { color: var(--slate-muted); }
+.home-search .pagefind-ui .pagefind-ui__result-thumb { display: none !important; }
+.home-search .pagefind-ui .pagefind-ui__result { padding-left: 0 !important; }
+.home-search .pagefind-ui .pagefind-ui__drawer { gap: 0 !important; }
+.home-search .pagefind-ui .pagefind-ui__results, .home-search .pagefind-ui .pagefind-ui__result { margin-left: 0 !important; }
