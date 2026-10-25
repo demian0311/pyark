@@ -1,5 +1,5 @@
-// Reference docs page: filter rows as you type, hide empty groups and their jump chips.
-// Inert on every other page. "/" is taken by the site search, so the box has no shortcut.
+// Reference docs page: filter rows as you type. Groups with no match hide, and the contents
+// block at the top shows live counts. Inert on every other page.
 document.addEventListener("DOMContentLoaded", () => {
   const box = document.getElementById("ref-filter");
   if (!box) return;
@@ -17,8 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       g.hidden = n === 0;
       const h = g.querySelector("h2");
-      const chip = h && document.querySelector(`.ref-chip[href="#${h.id}"]`);
-      if (chip) chip.hidden = n === 0;
+      const entry = h && document.querySelector(`.ref-index a[data-group="${h.id}"]`);
+      if (entry) {
+        entry.querySelector(".n").textContent = n;
+        entry.classList.toggle("empty", n === 0);
+      }
       shown += n;
     }
     count.textContent = q ? `${shown} match${shown === 1 ? "" : "es"}` : "";
