@@ -59,6 +59,13 @@ close_group
 } > "$gen"
 
 mkdocs build -q -f "$src/mkdocs.yml" -d "$out"
+# Cache-bust our own assets: a browser that cached an older slate.css keeps using it on a plain
+# reload even with no-cache on later responses (seen 2026-10-24). A content hash in the URL
+# makes every rebuild a new address.
+for a in slate.css ref-filter.js; do
+  v=$(md5sum "$out/assets/$a" | cut -c1-8)
+  find "$out" -path "$out/ref" -prune -o -name '*.html' -print0 | xargs -0 sed -i "s|assets/$a\"|assets/$a?v=$v\"|g"
+done
 ln -sfn "$docs" "$out/ref"
 log "site: built $out ($(find "$out" -name '*.html' -not -path '*/ref/*' | wc -l) pages), /ref -> store/docs"
 
