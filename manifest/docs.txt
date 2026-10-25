@@ -13,6 +13,8 @@
 # Library ids match names in manifest/packages.txt so `pyark doctor` can report gaps.
 # No docs site beyond the README (readable via pydoc): tomli-w, orjson, freezegun, anthropic (its
 # docs site is the whole Claude platform, too large to mirror).
+# harlequin: harlequin.sh answers wget with a Vercel bot challenge (HTTP 429, checked 2026-10-24);
+# `harlequin --help` is the only offline reference.
 # Every URL below returned 200 on 2026-10-17. The sqlite zip is versioned: find the current one
 # on https://sqlite.org/download.html under "Documentation" when refreshing.
 

@@ -9,7 +9,7 @@ Run it once while online and it fills a **store**: Arch packages, CPython builds
 - **uv** configured so `uv init`, `uv add`, `uv run` and `uv tool install` work with the network down.
 - **One Python**, pinned in `manifest/python.txt`, installed from a local mirror. pyark is opinionated: one interpreter, every project on it.
 - **A curated wheelhouse** (`manifest/packages.txt`) with every dependency, no source builds needed.
-- **CLI tools** on your PATH: ruff, ty, just, pre-commit, ipython, copier, build, marimo, mkdocs.
+- **CLI tools** on your PATH: ruff, ty, just, pre-commit, ipython, copier, build, marimo, mkdocs, harlequin (a terminal SQL editor for SQLite and DuckDB files).
 - **A Python-ready nvim**: LazyVim with ruff and ty as language servers, parsers and plugins restored from the store, nothing downloaded at runtime.
 - **A local docs site** (`pyark serve`, <http://localhost:8800>) with guides and the mirrored documentation of every library in the manifest, plus the Python docs, the Arch Wiki and a shelf of free books.
 - **`pyark new <name>`**: a project with a `src/` package, tests, ruff, ty, pytest and a `justfile`, synced from the store and committed.

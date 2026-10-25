@@ -8,3 +8,4 @@ build
 marimo
 mkdocs --with mkdocs-material --with mkdocstrings[python]
 debugpy
+harlequin
