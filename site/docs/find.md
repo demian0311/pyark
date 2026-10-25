@@ -1,3 +1,7 @@
+---
+icon: material/magnify
+---
+
 # Search all docs
 
 One search box over every mirrored page under [Reference docs](../reference/): the Python docs, SQLite, the Arch Wiki, the books and every library. The guides on this site have their own search in the top bar.

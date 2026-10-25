@@ -1,3 +1,7 @@
+---
+icon: material/wrench-outline
+---
+
 # Tools
 
 Installed by `pyark install arch` (pacman) and `pyark install python` (uv tool). All on your PATH.

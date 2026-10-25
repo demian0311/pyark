@@ -10,29 +10,49 @@ rm -rf "$src"; cp -r "$PYARK_ROOT/site" "$src"
 gen="$src/docs/reference.md"
 ver=$(python_version)
 hues=(blue teal orange purple green red yellow cyan gray)
+# Group heading in manifest/docs.txt → Material icon. A group missing here gets the default.
+declare -A group_icon=(
+  ["Core reference"]=star-four-points ["Guides and books"]=book-open-variant ["Tools"]=tools
+  ["CLI and terminal"]=console ["Data"]=chart-box ["Web and HTTP"]=web ["Databases"]=database
+  ["Config, serialization, time"]=cog-outline ["Testing extras"]=test-tube ["System and files"]=folder-cog
+)
+slug() { tr 'A-Z' 'a-z' <<<"$1" | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g'; }
+body=$(mktemp); jump=$(mktemp); trap 'rm -f "$body" "$jump"' EXIT
+n=0; total=0; have=0; count=0
+close_group() { if [ $n -gt 0 ]; then echo "</ul></div>" >>"$body"; sed -i "0,/@COUNT@/s//$count/" "$jump"; fi; }
+while IFS= read -r line; do
+  if [[ "$line" =~ ^#\ (.+) ]]; then
+    close_group
+    g=${BASH_REMATCH[1]} id=$(slug "$g") icon=${group_icon[$g]:-file-document-outline} hue="var(--slate-${hues[n % ${#hues[@]}]})"
+    printf '<div class="ref-group" style="--hue: %s" markdown>\n\n## :material-%s: %s {#%s}\n\n<ul class="ref-list">\n' "$hue" "$icon" "$g" "$id" >>"$body"
+    printf '<a class="ref-chip" href="#%s" style="--hue: %s">:material-%s: %s <span class="n">@COUNT@</span></a>\n' "$id" "$hue" "$icon" "$g" >>"$jump"
+    n=$((n+1)); count=0; continue
+  fi
+  [[ -z "$line" || "$line" =~ ^# ]] && continue
+  IFS=$'\t' read -r id kind srcurl title desc _opts <<<"$line"
+  title=${title//\{ver\}/$ver}; count=$((count+1)); total=$((total+1))
+  if [ -f "$docs/$id/ENTRY" ]; then
+    have=$((have+1))
+    printf '<li><span class="name"><a href="/ref/%s/%s">%s</a></span><span class="desc">%s</span><span class="meta">%s · %s</span></li>\n' \
+      "$id" "$(cat "$docs/$id/ENTRY")" "$title" "$desc" "$(du -sh "$docs/$id" | cut -f1)" "$(cut -c1-10 "$docs/$id/HARVESTED" 2>/dev/null || echo ?)" >>"$body"
+  else
+    printf '<li class="missing"><span class="name">%s</span><span class="desc">%s</span><span class="meta">not in store</span></li>\n' "$title" "$desc" >>"$body"
+  fi
+done < <(sed -n '/^# Core reference/,$p' "$PYARK_ROOT/manifest/docs.txt")
+close_group
 {
-  echo "# Reference docs"
+  printf -- '---\nicon: material/bookshelf\n---\n\n# Reference docs\n\n'
+  echo "$have of $total entries are in the store ($(du -sh "$docs" | cut -f1)), all served from this machine. Each entry's own search box works offline. Rows in red are in the manifest but not in the store yet: \`pyark harvest docs\` while online. To search inside every entry at once, use [Search all docs](../find/)."
   echo
-  echo "Everything below is served from this machine. Each entry's own search box works offline. Rows in red are in the manifest but not in the store yet: \`pyark harvest docs\` while online."
+  echo '<div class="ref-tools" markdown>'
+  echo ':material-filter-variant:{ .ref-filter-icon } <input id="ref-filter" type="search" placeholder="Filter by name or description" autocomplete="off"> <span id="ref-count"></span>'
+  echo '</div>'
   echo
-  n=0
-  while IFS= read -r line; do
-    if [[ "$line" =~ ^#\ (.+) ]]; then
-      [ $n -gt 0 ] && echo "</ul></div>"
-      printf '<div class="ref-group" style="--hue: var(--slate-%s)" markdown>\n<h2>%s</h2>\n<ul class="ref-list">\n' "${hues[n % ${#hues[@]}]}" "${BASH_REMATCH[1]}"
-      n=$((n+1)); continue
-    fi
-    [[ -z "$line" || "$line" =~ ^# ]] && continue
-    IFS=$'\t' read -r id kind srcurl title desc _opts <<<"$line"
-    title=${title//\{ver\}/$ver}
-    if [ -f "$docs/$id/ENTRY" ]; then
-      printf '<li><span class="name"><a href="/ref/%s/%s">%s</a></span><span class="desc">%s</span><span class="meta">%s · %s</span></li>\n' \
-        "$id" "$(cat "$docs/$id/ENTRY")" "$title" "$desc" "$(du -sh "$docs/$id" | cut -f1)" "$(cut -c1-10 "$docs/$id/HARVESTED" 2>/dev/null || echo ?)"
-    else
-      printf '<li class="missing"><span class="name">%s</span><span class="desc">%s</span><span class="meta">not in store</span></li>\n' "$title" "$desc"
-    fi
-  done < <(sed -n '/^# Core reference/,$p' "$PYARK_ROOT/manifest/docs.txt")
-  [ $n -gt 0 ] && echo "</ul></div>"
+  echo '<nav class="ref-jump" markdown>'
+  command cat "$jump"
+  echo '</nav>'
+  echo
+  command cat "$body"
 } > "$gen"
 
 mkdocs build -q -f "$src/mkdocs.yml" -d "$out"

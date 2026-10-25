@@ -76,3 +76,29 @@
 .md-typeset .pagefind-ui__result-link { color: var(--slate-primary); font-weight: 600; }
 .md-typeset .pagefind-ui__result-excerpt { color: var(--slate-muted); }
 .md-typeset .pagefind-ui__result-title::before { content: attr(data-src) " "; }
+
+/* Icons in headings and the side menu take the heading's colour. */
+.md-typeset h2 .twemoji, .md-typeset h3 .twemoji { margin-right: .3rem; vertical-align: -.12em; }
+.md-typeset h2 .twemoji svg, .md-typeset h3 .twemoji svg { width: 1.05em; height: 1.05em; }
+.md-nav__link .md-icon svg, .md-nav__link svg { opacity: .8; }
+
+/* Reference docs: filter box and jump chips above the groups. */
+.ref-tools { display: flex; align-items: center; gap: .5rem; margin: 1rem 0 .7rem; }
+.ref-tools .ref-filter-icon { color: var(--slate-muted); }
+#ref-filter { flex: 1; max-width: 26rem; font: inherit; font-size: .85rem; padding: .45rem .7rem; color: var(--slate-text);
+  background: var(--slate-surface); border: 1px solid var(--slate-border); border-radius: .4rem; }
+#ref-filter:focus { outline: 2px solid var(--slate-primary); outline-offset: 1px; }
+#ref-count { font: 400 .72rem/1 "JetBrains Mono", monospace; color: var(--slate-muted); }
+.ref-jump { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1.4rem; }
+.md-typeset .ref-chip { display: inline-flex; align-items: center; gap: .3rem; padding: .25rem .6rem; font-size: .75rem;
+  color: var(--hue); border: 1px solid var(--slate-border); border-left: 3px solid var(--hue); border-radius: .35rem;
+  background: var(--slate-surface); }
+.md-typeset .ref-chip:hover { background: var(--slate-overlay); color: var(--hue); }
+.ref-chip .n { font: 400 .68rem/1 "JetBrains Mono", monospace; color: var(--slate-muted); }
+.ref-chip[hidden], .ref-group[hidden], .ref-list li[hidden] { display: none !important; }
+.ref-group h2 { scroll-margin-top: 4rem; }
+.md-typeset h2 { font-size: 1.2em; font-weight: 600; margin: 1.8em 0 .5em; }
+.md-typeset .ref-group h2 { font-size: 1.15rem; margin: 0 0 .5rem; }
+.md-typeset h2 code { font-size: .9em; }
+.ref-tools p, .ref-jump p { margin: 0; }
+.ref-tools { margin-top: 1.2rem; }

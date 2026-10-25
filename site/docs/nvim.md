@@ -1,8 +1,12 @@
+---
+icon: material/file-code-outline
+---
+
 # Editor (nvim)
 
 Omarchy ships LazyVim. `pyark install nvim` adds one file to it, `lua/plugins/pyark-python.lua`, and restores plugins and parsers from the store. Your own plugins, keymaps and theme are untouched.
 
-**What you get in a `.py` buffer**
+## :material-language-python: What you get in a `.py` buffer
 
 | | Provided by |
 |---|---|
@@ -14,7 +18,7 @@ Omarchy ships LazyVim. `pyark install nvim` adds one file to it, `lua/plugins/py
 
 `:LspInfo` in a Python file lists `ruff` and `ty`. If it lists nothing, the two binaries are missing: run `pyark install arch`.
 
-**Offline notes**
+## :material-wifi-off: Offline notes
 
 - Mason installs nothing for Python. Its own list (stylua, shfmt, lua-language-server) is restored from the store.
 - LazyVim's update checker is on in the Omarchy config and fails silently offline. `:Lazy` shows "failed to fetch" entries; ignore them.

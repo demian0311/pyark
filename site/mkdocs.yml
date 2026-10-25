@@ -18,8 +18,9 @@ theme:
       primary: custom
       accent: custom
       toggle: { icon: material/weather-sunny, name: Light }
-  features: [navigation.sections, navigation.footer, navigation.top, search.highlight, content.code.copy]
+  features: [navigation.sections, navigation.footer, navigation.top, navigation.tracking, toc.follow, search.highlight, content.code.copy]
 extra_css: [assets/slate.css]
+extra_javascript: [assets/ref-filter.js]
 nav:
   - Home: index.md
   - Start a project: start-a-project.md
@@ -30,4 +31,14 @@ nav:
   - Reference docs: reference.md
   - Search all docs: find.md
 plugins: [search]
-markdown_extensions: [admonition, attr_list, md_in_html, tables, pymdownx.superfences, pymdownx.highlight, toc]
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - toc: { permalink: false }
+  - pymdownx.emoji:           # :material-x: icons, inlined as SVG at build time, so offline
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg

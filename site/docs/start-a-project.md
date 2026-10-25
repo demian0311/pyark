@@ -1,3 +1,7 @@
+---
+icon: material/rocket-launch-outline
+---
+
 # Start a project
 
 ```bash
@@ -12,7 +16,7 @@ uv add polars httpx
 
 For a throwaway, `uv init scratch` is enough: `pyproject.toml`, `main.py`, nothing else.
 
-**Run things**
+## :material-play-circle-outline: Run things
 
 | What | Command |
 |---|---|
@@ -23,11 +27,11 @@ For a throwaway, `uv init scratch` is enough: `pyproject.toml`, `main.py`, nothi
 | the REPL with the project importable | `uv run ipython` |
 | a notebook | `marimo edit notebook.py` |
 
-**The Python version**
+## :material-language-python: The Python version
 
 There is one, pinned in `manifest/python.txt`, and every project uses it. `uv python list --only-installed` shows it.
 
-**A library without a project**
+## :material-flask-outline: A library without a project
 
 `uv run --with polars python` starts Python with a library available, no project needed. The environment is cached and reused.
 
