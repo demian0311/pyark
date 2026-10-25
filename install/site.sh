@@ -44,8 +44,7 @@ done < <(sed -n '/^# Core reference/,$p' "$PYARK_ROOT/manifest/docs.txt")
 close_group
 {
   printf -- '---\nicon: material/bookshelf\n---\n\n# Reference docs\n\n'
-  echo "Every manual and book below is served from this machine ($have entries, $(du -sh "$docs" | cut -f1 | sed -E 's/([0-9])([KMG])$/\1 \2B/')), and each one's own search works offline. To search inside all of them at once, use [Search all docs](../find/)."
-  [ "$have" -lt "$total" ] && echo && echo "$((total - have)) entries in red are in the manifest but not in the store yet. Run \`pyark harvest docs\` while online."
+  [ "$have" -lt "$total" ] && echo "$((total - have)) entries in red are in the manifest but not in the store yet. Run \`pyark harvest docs\` while online."
   echo
   echo '<nav class="ref-tiles" markdown>'
   command cat "$jump"

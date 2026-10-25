@@ -78,7 +78,6 @@ lxml	site	https://lxml.de/	lxml	Fast XML and HTML	reject=lxml.de/files/|lxml.de/
 # Databases
 sqlalchemy	site	https://docs.sqlalchemy.org/en/20/	SQLAlchemy 2.0	ORM and SQL toolkit
 alembic	site	https://alembic.sqlalchemy.org/en/latest/	Alembic	Schema migrations for sqlalchemy
-psycopg	site	https://www.psycopg.org/psycopg3/docs/	Psycopg 3	PostgreSQL driver
 sqlite-utils	site	https://sqlite-utils.datasette.io/en/stable/	sqlite-utils	CLI and library for sqlite files
 
 # Config, serialization, time

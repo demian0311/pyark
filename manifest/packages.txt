@@ -44,7 +44,6 @@ lxml
 # Databases
 sqlalchemy
 alembic
-psycopg
 sqlite-utils
 
 # Config, serialization, time
